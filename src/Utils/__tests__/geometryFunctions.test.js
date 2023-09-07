@@ -1,5 +1,6 @@
 import { intersectSegments, doesIntersect, 
-    angleBetweenVectors, angleFromXAxis } from "../pointsofbox";
+    angleBetweenVectors, angleFromXAxis,
+    betweenTwoAngles, ccw } from "../geometryFunctions";
 
 test('intersect_segments segments end at same point', () => {
     expect(intersectSegments([0, 3], [3, 6], [2, 4], [3, 6])).toStrictEqual([3, 6]);
@@ -59,4 +60,32 @@ test('angleFromXAxis: 210 deg', () => {
 
 test('angleFromXAxis: 270 deg', () => {
     expect(angleFromXAxis([0, -1])).toBeCloseTo(3 * Math.PI / 2);
+})
+
+test('ccw: 45 between 315 and 135', () => {
+    expect(ccw([1, -1], [1, 1])).toBe(true);
+})
+
+test('ccw: 45 not between 135 and 315', () => {
+    expect(ccw([-1, 1], [1, 1])).toBe(false);
+})
+
+test('ccw: 225 between 135 and 315', () => {
+    expect(ccw([-1, 1], [-1, -1])).toBe(true);
+})
+
+test('ccw: 225 not between 315 and 135', () => {
+    expect(ccw([1, -1], [-1, -1])).toBe(false);
+})
+
+test('ccw: 315 between 270 and 90', () => {
+    expect(ccw([0, -1], [1, -1])).toBe(true);
+})
+
+test('betweenTwoAngles: 0 between 350 and 25', () => {
+    expect(betweenTwoAngles(0, (350 * Math.PI / 180), (25 * Math.PI / 180))).toBe(true);
+})
+
+test('betweenTwoAngles: 270 not between 350 and 25', () => {
+    expect(betweenTwoAngles((3 * Math.PI / 2), (350 * Math.PI / 180), (25 * Math.PI / 180))).toBe(false);
 })
