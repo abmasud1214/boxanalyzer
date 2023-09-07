@@ -1,4 +1,4 @@
-import { addPoint } from "../pointsofbox";
+import { addPoint, vanishingPoints, lengthDefined } from "../pointsofbox";
 
 test("addPoint: insert point to empty box", () => {
     let box = Array(8);
@@ -57,4 +57,32 @@ test("addPoint: final point", () => {
     let expectedBox = [...box];
     expectedBox[7] = [0.1, 0.1];
     expect(addPoint(box, [0.1, 0.1])).toStrictEqual(expectedBox);
+})
+
+/**
+ * @todo Write test cases that actually validate if vanishing points are correct.
+ */
+
+test("vanishingPoints, check if two added on 5 points in box", () => {
+    let box = [[0, 0], [1, 1], [-1, 0], [0.15, -1], [0.1, 0.6], ...Array(3)];
+    let vp = [...Array(3)];
+    // console.log(vanishingPoints(box, vp));
+    expect(lengthDefined(vanishingPoints(box, vp))).toBe(2);
+})
+
+test("vanishingPoints: check if two added on fifth point (pos 6)", () => {
+    let box = [[0, 0], [1, 1], [-1, 0], [0.15, -1], ...Array(2), [0.4, -0.6], undefined];
+    let vp = [...Array(3)];
+    // console.log(vanishingPoints(box, vp));
+    expect(lengthDefined(vanishingPoints(box, vp))).toBe(2);   
+})
+
+test("vanishingPoints: 3 vp on 6 points", () => {
+    let box = [[0, 0], [1, 1], [-1, 0], [0.15, -1], [0.1, 0.6], ...Array(3)];
+    let vp = [...Array(3)];   
+    vp = vanishingPoints(box, vp);
+    // console.log(vanishingPoints(box, vp));
+    box[6] = [0.4, -0.6];
+    // console.log(vanishingPoints(box, vp));
+    expect(lengthDefined(vanishingPoints(box, vp))).toBe(3);
 })

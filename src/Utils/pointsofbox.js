@@ -42,7 +42,7 @@ function point456(boxPoints, newPoint) {
     else return 6;
 }
 
-function lengthDefined(arr) {
+export function lengthDefined(arr) {
     return arr.reduce((prev, c) => prev + (c === undefined ? 0 : 1), 0);
 }
 
@@ -53,6 +53,7 @@ function vpFromIdx(boxPoints, idx1, idx2, idx3) {
     let pointV = boxPoints[idx3];
     let vp1 = intersectSegments(origin, point1, point2, pointV);
     let vp2 = intersectSegments(origin, point2, point1, pointV);
+    // console.log(origin, point1, point2, pointV, vp1, vp2);
     return [vp1, vp2];
 }
 
@@ -65,19 +66,19 @@ export function vanishingPoints(boxPoints, vp) {
     // can't be overwritten.
     if (lengthDefined(boxPoints) === 5 || lengthDefined(boxPoints) === 6) {
         if (boxPoints[4] !== undefined) {
-            let vp1, vp2 = vpFromIdx(boxPoints, 1, 2, 4);
+            let [vp1, vp2] = vpFromIdx(boxPoints, 1, 2, 4);
             newVanishingPoints[0] = vp[0] ? vp[0] : vp1;
             newVanishingPoints[1] = vp[1] ? vp[1] : vp2;
         }
         if (boxPoints[5] !== undefined) {
-            let vp1, vp2 = vpFromIdx(boxPoints, 2, 3, 5);
+            let [vp1, vp2] = vpFromIdx(boxPoints, 2, 3, 5);
             newVanishingPoints[1] = vp[1] ? vp[1] : vp1;
             newVanishingPoints[2] = vp[2] ? vp[2] : vp2;
         } 
         if (boxPoints[6] !== undefined) {
-            let vp1, vp2 = vpFromIdx(boxPoints, 1, 3, 6);
+            let [vp1, vp2] = vpFromIdx(boxPoints, 1, 3, 6);
             newVanishingPoints[0] = vp[0] ? vp[0] : vp1;
-            newVanishingPoints[2] = vp[0] ? vp[0] : vp2;
+            newVanishingPoints[2] = vp[2] ? vp[2] : vp2;
         }
     }
     return newVanishingPoints;
