@@ -32,3 +32,31 @@ test('doesIntersect return false if overlapping', () => {
 test('doesIntersect return true if intersect', () => {
     expect(doesIntersect([0, 0], [4, 4], [1, 5], [3, 3])).toBe(true);
 })
+
+test('angleBetweenVectors: 30 deg', () => {
+    expect(angleBetweenVectors([1, 0], [Math.sqrt(3), 1])).toBeCloseTo(Math.PI / 6);
+})
+
+test('angleBetweenVectors: 90 deg', () => {
+    expect(angleBetweenVectors([1, 0], [0, 3])).toBeCloseTo(Math.PI / 2);
+})
+
+test('angleBetweenVectors: 150 deg', () => {
+    expect(angleBetweenVectors([1, 0], [-Math.sqrt(3), -1])).toBeCloseTo(5 * Math.PI / 6);
+})
+
+test('angleFromXAxis: 30 deg', () => {
+    expect(angleFromXAxis([Math.sqrt(3), 1])).toBeCloseTo(Math.PI / 6);
+})
+
+test('angleFromXAxis: 150 deg', () => {
+    expect(angleFromXAxis([-Math.sqrt(3), 1])).toBeCloseTo(5 * Math.PI / 6);
+})
+
+test('angleFromXAxis: 210 deg', () => {
+    expect(angleFromXAxis([-Math.sqrt(3), -1])).toBeCloseTo(7 * Math.PI / 6);
+})
+
+test('angleFromXAxis: 270 deg', () => {
+    expect(angleFromXAxis([0, -1])).toBeCloseTo(3 * Math.PI / 2);
+})

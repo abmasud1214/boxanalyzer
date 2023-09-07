@@ -35,14 +35,16 @@ function doesIntersect(a1, a2, b1, b2) {
 // fifth point must align with other 2 vanishing points.
 
 function angleBetweenVectors(v1, v2) {
-    magV1 = Math.sqrt(v1.reduce((prev, curr) => prev + curr ** 2, 0));
-    magV2 = Math.sqrt(v2.reduce((prev, curr) => prev + curr ** 2, 0));
-    dot = v1[0]*v2[0] + v1[1]*v2[1];
-    console.log(dot, magV1, magV2);
-    console.log(dot / (magV1*magV2));
-    theta = Math.acos(dot / (magV1 * magV2));
+    let magV1 = Math.sqrt(v1.reduce((prev, curr) => prev + curr ** 2, 0));
+    let magV2 = Math.sqrt(v2.reduce((prev, curr) => prev + curr ** 2, 0));
+    let dot = v1[0]*v2[0] + v1[1]*v2[1];
+    // console.log(dot, magV1, magV2);
+    // console.log(dot / (magV1*magV2));
+    let theta = Math.acos(dot / (magV1 * magV2));
     return theta;
 }
+
+// console.log(angleBetweenVectors([1, 0], [Math.sqrt(3), 1]));
 
 // 0 : center
 // 1 - 3 : first through third segment going counterclockwise
@@ -52,8 +54,8 @@ function angleBetweenVectors(v1, v2) {
 // 7 : back corner
 
 function angleFromXAxis(v1) {
-    angle = Math.atan2(v1[1], v1[0]);
-    return angle;
+    let angle = Math.atan2(v1[1], v1[0]);
+    return (angle < 0) ? 2 * Math.PI + angle : angle;
 }
 
 // console.log(doesIntersect([0, 0], [4, 4], [1, 1], [3, 3]))
