@@ -46,12 +46,7 @@ function angleBetweenVectors(v1, v2) {
 
 // console.log(angleBetweenVectors([1, 0], [Math.sqrt(3), 1]));
 
-// 0 : center
-// 1 - 3 : first through third segment going counterclockwise
-// 4 : point between first and second segment
-// 5 : point between second and third
-// 6 : point between third and fourth
-// 7 : back corner
+
 
 function angleFromXAxis(v1) {
     let angle = Math.atan2(v1[1], v1[0]);
