@@ -57,6 +57,12 @@ function vpFromIdx(boxPoints, idx1, idx2, idx3) {
     return [vp1, vp2];
 }
 
+const connectedPoints = {
+    4: [1, 2],
+    5: [2, 3],
+    6: [1, 3]
+}
+
 export function vanishingPoints(boxPoints, vp) {
     let newVanishingPoints = [...vp];
     // When a vanishing point is set, that is the defined vp and will never be replaced.
@@ -65,21 +71,43 @@ export function vanishingPoints(boxPoints, vp) {
     // the third vp is set. Only the third will be set, since the other two 
     // can't be overwritten.
     if (lengthDefined(boxPoints) === 5 || lengthDefined(boxPoints) === 6) {
-        if (boxPoints[4] !== undefined) {
-            let [vp1, vp2] = vpFromIdx(boxPoints, 1, 2, 4);
-            newVanishingPoints[0] = vp[0] ? vp[0] : vp1;
-            newVanishingPoints[1] = vp[1] ? vp[1] : vp2;
-        }
-        if (boxPoints[5] !== undefined) {
-            let [vp1, vp2] = vpFromIdx(boxPoints, 2, 3, 5);
-            newVanishingPoints[1] = vp[1] ? vp[1] : vp1;
-            newVanishingPoints[2] = vp[2] ? vp[2] : vp2;
-        } 
-        if (boxPoints[6] !== undefined) {
-            let [vp1, vp2] = vpFromIdx(boxPoints, 1, 3, 6);
-            newVanishingPoints[0] = vp[0] ? vp[0] : vp1;
-            newVanishingPoints[2] = vp[2] ? vp[2] : vp2;
+        for (let i = 4; i < 7; i++) {
+            if (boxPoints[i] !== undefined) {
+                let p = connectedPoints[i]
+                let [vp1, vp2] = vpFromIdx(boxPoints, p[0], p[1], i);
+                newVanishingPoints[p[0] - 1] = vp[p[0] - 1] ? vp[p[0] - 1] : vp1
+                newVanishingPoints[p[1] - 1] = vp[p[1] - 1] ? vp[p[1] - 1] : vp2
+            }
         }
     }
     return newVanishingPoints;
+}
+
+export function correctBoxPoints(boxPoints, vp, point) {
+    let newBoxPoints = [...boxPoints];
+    if (lengthDefined(boxPoints) === 5) {
+        const n = point456(boxPoints, point);
+        const tempBoxPoints = [...boxPoints];
+        tempBoxPoints[n] = point
+        const vpNew = vanishingPoints(tempBoxPoints, vp);
+        const p = connectedPoints[n];
+        // console.log(vpNew, p[1]-1, p[0]-1);
+        const intersectPoint = intersectSegments(boxPoints[p[0]], vpNew[p[1]-1],
+            boxPoints[p[1]], vpNew[p[0]-1]);
+        newBoxPoints = addPoint(boxPoints, intersectPoint);
+    } else if (lengthDefined === 6) {
+        const n = point456(boxPoints, point);
+        const p = connectedPoints[n];
+        const intersectPoint = intersectSegments(boxPoints[p[0]], vp[p[1]-1],
+            boxPoints[p[1]], vp[p[0]-1]);
+        newBoxPoints = addPoint(boxPoints, intersectPoint);
+    } else if (lengthDefined === 7) {
+        const p1 = boxPoints[5];
+        const p2 = boxPoints[6];
+        const intersectPoint = intersectSegments(p1, vp[2], p2, vp[0]);
+        newBoxPoints = addPoint(boxPoints, intersectPoint);
+    } else {
+        newBoxPoints = addPoints(boxPoints, point);
+    }
+    return newBoxPoints;
 }
