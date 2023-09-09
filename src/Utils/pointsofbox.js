@@ -86,6 +86,7 @@ export function calculateVanishingPoints(boxPoints, vp) {
 export function correctBoxPoints(boxPoints, vp, point) {
     let newBoxPoints = [...boxPoints];
     if (lengthDefined(boxPoints) === 5) {
+        console.log("56");
         const n = point456(boxPoints, point);
         const tempBoxPoints = [...boxPoints];
         tempBoxPoints[n] = point
@@ -95,19 +96,32 @@ export function correctBoxPoints(boxPoints, vp, point) {
         const intersectPoint = intersectSegments(boxPoints[p[0]], vpNew[p[1]-1],
             boxPoints[p[1]], vpNew[p[0]-1]);
         newBoxPoints = addPoint(boxPoints, intersectPoint);
-    } else if (lengthDefined === 6) {
+    } else if (lengthDefined(boxPoints) === 6) {
+        console.log("6")
         const n = point456(boxPoints, point);
         const p = connectedPoints[n];
         const intersectPoint = intersectSegments(boxPoints[p[0]], vp[p[1]-1],
             boxPoints[p[1]], vp[p[0]-1]);
         newBoxPoints = addPoint(boxPoints, intersectPoint);
-    } else if (lengthDefined === 7) {
+    } else if (lengthDefined(boxPoints) === 7) {
+        console.log("8")
         const p1 = boxPoints[5];
         const p2 = boxPoints[6];
-        const intersectPoint = intersectSegments(p1, vp[2], p2, vp[0]);
+        const intersectPoint = intersectSegments(p1, vp[0], p2, vp[1]);
         newBoxPoints = addPoint(boxPoints, intersectPoint);
     } else {
         newBoxPoints = addPoint(boxPoints, point);
     }
     return newBoxPoints;
+}
+
+export const backBoxConnections = {
+    0: [],
+    1: [0],
+    2: [0],
+    3: [0],
+    4: [1, 2],
+    5: [2, 3],
+    6: [1, 3],
+    7: [4, 5, 6]
 }

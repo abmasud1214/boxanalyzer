@@ -1,7 +1,7 @@
 import React from "react";
 
 import { addPoint, calculateVanishingPoints, 
-    correctBoxPoints } from "../Utils/pointsOfBox.js";
+    correctBoxPoints, backBoxConnections } from "../Utils/pointsOfBox.js";
 
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
@@ -12,19 +12,35 @@ export default function Canvas(props) {
     const [correctBP, setCorrectBP] = React.useState(initBox);
     const [vanishingPoints, setVanishingPoints] = React.useState(Array.from(3));
 
-    const draw = (ctx) => {
-        ctx.fillStyle = '#EEEEEE';
-        ctx.fillRect(0, 0, width, height);
-        ctx.fillStyle = "#000000";
-        console.log(boxPoints);
-        console.log(correctBP);
-        for (const point of boxPoints) {
+    const drawBox = (ctx, box) => {
+        for (const point of box) {
             if (point !== undefined) {
                 ctx.beginPath();
                 ctx.arc(point[0], point[1], 3, 0, 2 * Math.PI);
                 ctx.fill();
             }
         }
+
+        for (let i = 0; i < box.length; i++) {
+            if (box[i] !== undefined) {
+                for (const connection of backBoxConnections[i]) {
+                    const connectionPoint = box[connection];
+                    ctx.beginPath();
+                    ctx.moveTo(box[i][0], box[i][1]);
+                    ctx.lineTo(connectionPoint[0], connectionPoint[1]);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    const draw = (ctx) => {
+        ctx.fillStyle = '#EEEEEE';
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = "#000000";
+        console.log(boxPoints);
+        console.log(correctBP);
+        drawBox(ctx, correctBP);
     }
 
     const handleCanvasClick = (event) => {
