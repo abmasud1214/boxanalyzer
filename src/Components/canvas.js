@@ -1,6 +1,6 @@
 import React from "react";
 
-// import { addPoint, correctBoxPoints } from "../Utils/pointsOfBox.js";
+import { addPoint, correctBoxPoints } from "../Utils/pointsOfBox.js";
 
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
@@ -14,6 +14,7 @@ export default function Canvas(props) {
         ctx.fillStyle = '#EEEEEE';
         ctx.fillRect(0, 0, width, height);
         ctx.fillStyle = "#000000";
+        console.log(boxPoints);
         for (const point of boxPoints) {
             if (point !== undefined) {
                 ctx.beginPath();
@@ -21,6 +22,16 @@ export default function Canvas(props) {
                 ctx.fill();
             }
         }
+    }
+
+    const handleCanvasClick = (event) => {
+        const currentCoord = { x: event.clientX, y: event.clientY };
+        const boundingRect = event.currentTarget.getBoundingClientRect();
+
+        const relativeCoord = { x: currentCoord["x"] - boundingRect.left,
+            y: currentCoord["y"] - boundingRect.top};
+
+        setBoxPoints(addPoint(boxPoints, [relativeCoord.x, relativeCoord.y]));
     }
 
     React.useEffect(() => {
@@ -36,6 +47,7 @@ export default function Canvas(props) {
                 ref={canvasRef}
                 width={width}
                 height={height}
+                onClick={handleCanvasClick}
             />
         </div>
     )
