@@ -107,7 +107,7 @@ export function correctBoxPoints(boxPoints, vp, point) {
         const intersectPoint = intersectSegments(p1, vp[2], p2, vp[0]);
         newBoxPoints = addPoint(boxPoints, intersectPoint);
     } else {
-        newBoxPoints = addPoints(boxPoints, point);
+        newBoxPoints = addPoint(boxPoints, point);
     }
     return newBoxPoints;
 }
