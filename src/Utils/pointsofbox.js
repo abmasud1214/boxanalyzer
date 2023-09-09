@@ -63,7 +63,7 @@ const connectedPoints = {
     6: [1, 3]
 }
 
-export function vanishingPoints(boxPoints, vp) {
+export function calculateVanishingPoints(boxPoints, vp) {
     let newVanishingPoints = [...vp];
     // When a vanishing point is set, that is the defined vp and will never be replaced.
     // When the first "exterior" segment is added (l == 5), 
@@ -89,7 +89,7 @@ export function correctBoxPoints(boxPoints, vp, point) {
         const n = point456(boxPoints, point);
         const tempBoxPoints = [...boxPoints];
         tempBoxPoints[n] = point
-        const vpNew = vanishingPoints(tempBoxPoints, vp);
+        const vpNew = calculateVanishingPoints(tempBoxPoints, vp);
         const p = connectedPoints[n];
         // console.log(vpNew, p[1]-1, p[0]-1);
         const intersectPoint = intersectSegments(boxPoints[p[0]], vpNew[p[1]-1],

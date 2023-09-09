@@ -1,6 +1,7 @@
 import React from "react";
 
-import { addPoint, correctBoxPoints } from "../Utils/pointsOfBox.js";
+import { addPoint, calculateVanishingPoints, 
+    correctBoxPoints } from "../Utils/pointsOfBox.js";
 
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
@@ -9,12 +10,14 @@ export default function Canvas(props) {
     const initBox = [[Math.floor(width / 2), Math.floor(height / 2)], ...Array.from(7)];
     const [boxPoints, setBoxPoints] = React.useState(initBox);
     const [correctBP, setCorrectBP] = React.useState(initBox);
+    const [vanishingPoints, setVanishingPoints] = React.useState(Array.from(3));
 
     const draw = (ctx) => {
         ctx.fillStyle = '#EEEEEE';
         ctx.fillRect(0, 0, width, height);
         ctx.fillStyle = "#000000";
         console.log(boxPoints);
+        console.log(correctBP);
         for (const point of boxPoints) {
             if (point !== undefined) {
                 ctx.beginPath();
@@ -32,6 +35,9 @@ export default function Canvas(props) {
             y: currentCoord["y"] - boundingRect.top};
 
         setBoxPoints(addPoint(boxPoints, [relativeCoord.x, relativeCoord.y]));
+        const cbp = correctBoxPoints(correctBP, vanishingPoints, [relativeCoord.x, relativeCoord.y]);
+        setCorrectBP(cbp);
+        setVanishingPoints(calculateVanishingPoints(cbp, vanishingPoints));
     }
 
     React.useEffect(() => {
