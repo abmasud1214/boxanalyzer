@@ -6,3 +6,7 @@ import App from './App';
 //   const linkElement = screen.getByText(/learn react/i);
 //   expect(linkElement).toBeInTheDocument();
 // });
+
+test("empty", () => {
+    expect(true).toBe(true);
+})

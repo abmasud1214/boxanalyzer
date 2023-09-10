@@ -1,4 +1,5 @@
-import { addPoint, calculateVanishingPoints, lengthDefined, correctBoxPoints } from "../pointsOfBox";
+import { addPoint, calculateVanishingPoints, lengthDefined, correctBoxPoints,
+    validPoint } from "../pointsOfBox";
 
 test("addPoint: insert point to empty box", () => {
     let box = Array(8);
@@ -94,4 +95,32 @@ test("correctBoxPoints: correct sixth point when added.", () => {
     let newBox = correctBoxPoints(box, vp, [0.4, -0.6]);
     expect(newBox[6][0]).toBeCloseTo(0.616666666666);
     expect(newBox[6][1]).toBeCloseTo(-0.022222222222);
+})
+
+test("validPoint: true when second point and > 90deg.", () => {
+    let box = [[0, 0], [0, 1], ...Array(6)];
+    let point = [-1, -1];
+    let valid = validPoint(box, point);
+    expect(valid).toBe(true);
+})
+
+test("validPoint: false when second point and < 90deg.", () => {
+    let box = [[0, 0], [0, 1], ...Array(6)];
+    let point = [1, 1];
+    let valid = validPoint(box, point);
+    expect(valid).toBe(false);
+})
+
+test("validPoint: true when third point and > 90deg.", () => {
+    let box = [[0, 0], [0, 1], [-0.1, 1], ...Array(5)];
+    let point = [-1, -0.6];
+    let valid = validPoint(box, point);
+    expect(valid).toBe(true);
+})
+
+test("validPoint: false when third point and < 90deg.", () => {
+    let box = [[0, 0], [0, 1], [-0.1, 1], ...Array(5)];
+    let point = [-1, 0];
+    let valid = validPoint(box, point);
+    expect(valid).toBe(false);
 })

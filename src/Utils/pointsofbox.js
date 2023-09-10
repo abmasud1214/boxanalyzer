@@ -86,7 +86,7 @@ export function calculateVanishingPoints(boxPoints, vp) {
 export function correctBoxPoints(boxPoints, vp, point) {
     let newBoxPoints = [...boxPoints];
     if (lengthDefined(boxPoints) === 5) {
-        console.log("56");
+        // console.log("56");
         const n = point456(boxPoints, point);
         const tempBoxPoints = [...boxPoints];
         tempBoxPoints[n] = point
@@ -124,4 +124,17 @@ export const backBoxConnections = {
     5: [2, 3],
     6: [1, 3],
     7: [4, 5, 6]
+}
+
+export function validPoint(box, point) {
+    let valid = true;
+    if (lengthDefined(box) === 2 || lengthDefined(box) === 3) {
+        const v1 = vector(box[1], box[0]);
+        const vp = vector(point, box[0]);
+        valid = (angleBetweenVectors(v1, vp) > Math.PI / 2);
+        let validP2 = box[2] !== undefined && angleBetweenVectors(vector(box[2], box[0]), vector(point, box[0])) > Math.PI / 2;
+        let validP3 = box[3] !== undefined && angleBetweenVectors(vector(box[3], box[0]), vector(point, box[0])) > Math.PI / 2;
+        valid = valid && (box[2] === undefined || validP2) && (box[3] === undefined || validP3); 
+    }
+    return valid;
 }
