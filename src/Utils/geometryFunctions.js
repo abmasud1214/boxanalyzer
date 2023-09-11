@@ -35,8 +35,8 @@ function doesIntersect(a1, a2, b1, b2) {
 // fifth point must align with other 2 vanishing points.
 
 function angleBetweenVectors(v1, v2) {
-    let magV1 = Math.sqrt(v1.reduce((prev, curr) => prev + curr ** 2, 0));
-    let magV2 = Math.sqrt(v2.reduce((prev, curr) => prev + curr ** 2, 0));
+    let magV1 = vectorMagnitude(v1); 
+    let magV2 = vectorMagnitude(v2);
     let dot = v1[0]*v2[0] + v1[1]*v2[1];
     // console.log(dot, magV1, magV2);
     // console.log(dot / (magV1*magV2));
@@ -73,6 +73,10 @@ function vector(a1, a2) {
     return [a2[0] - a1[0], a2[1] - a1[1]];
 }
 
+function vectorMagnitude(v1) {
+    return Math.sqrt(v1.reduce((prev, curr) => prev + curr ** 2, 0));
+}
+
 // console.log(doesIntersect([0, 0], [4, 4], [1, 1], [3, 3]))
 export {intersectSegments, doesIntersect, angleBetweenVectors, angleFromXAxis,
-    betweenTwoAngles, ccw, vector};
+    betweenTwoAngles, ccw, vector, vectorMagnitude};

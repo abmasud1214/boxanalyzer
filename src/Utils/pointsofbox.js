@@ -1,6 +1,6 @@
 import { intersectSegments, doesIntersect, 
     angleBetweenVectors, angleFromXAxis,
-    betweenTwoAngles, ccw, vector } from "./geometryFunctions";
+    betweenTwoAngles, ccw, vector, vectorMagnitude } from "./geometryFunctions";
 
 // 0 : center
 // 1 - 3 : first through third segment going counterclockwise
@@ -130,13 +130,72 @@ export const backBoxConnections = {
 
 export function validPoint(box, point) {
     let valid = true;
-    if (lengthDefined(box) === 2 || lengthDefined(box) === 3) {
-        const v1 = vector(box[1], box[0]);
-        const vp = vector(point, box[0]);
-        valid = (angleBetweenVectors(v1, vp) > Math.PI / 2);
-        let validP2 = box[2] !== undefined && angleBetweenVectors(vector(box[2], box[0]), vector(point, box[0])) > Math.PI / 2;
-        let validP3 = box[3] !== undefined && angleBetweenVectors(vector(box[3], box[0]), vector(point, box[0])) > Math.PI / 2;
-        valid = valid && (box[2] === undefined || validP2) && (box[3] === undefined || validP3); 
+    const idx = indexOfPoint(box, point);
+    if (idx === 2 || idx === 3) {
+        valid = validCardinalPoint(box, point);
+    } else if (idx >= 4 && idx < 7 ) {
+        valid = validBranchPoint(box, point);
     }
+    return valid;
+}
+
+/**
+ * "Cardinal Point" are the points that connect directly to the origin (closest
+ * point to viewer of box.) They make up the "Y";
+ * 
+ * All cardinal points must be at least PI/2 rad from other cardinal points to
+ * create a mathematically valid box in 3 point perspective.
+ * 
+ * @param {Array} box 
+ * @param {Array} point  
+ * @returns {bool} whether the point is within PI/2 rad of other 
+ */
+function validCardinalPoint(box, point) {
+    const v1 = vector(box[1], box[0]);
+    const vp = vector(point, box[0]);
+    let valid = (angleBetweenVectors(v1, vp) > Math.PI / 2);
+    let validP2 = box[2] !== undefined && angleBetweenVectors(vector(box[2], box[0]), vector(point, box[0])) > Math.PI / 2;
+    let validP3 = box[3] !== undefined && angleBetweenVectors(vector(box[3], box[0]), vector(point, box[0])) > Math.PI / 2;
+    valid = valid && (box[2] === undefined || validP2) && (box[3] === undefined || validP3); 
+    return valid
+}
+
+/**
+ * Branch point refers to the external points of the box, connected with two lines
+ * to the cardinal points.
+ * 
+ * All branch points must create vanishing points that point in the same direction
+ * as a cardinal point to create a mathematically valid box in 3 pt perspective.
+ * 
+ * @param {Array} box : Array of Arrays of integers
+ * @param {Array} point : Array of integers, length 2
+ * @param {Array} vanishingPoints : Array of Array of integers
+ * @returns {bool} whether the point gives valid vanishing points.
+ */
+function validBranchPoint(box, point) {
+    const idx = indexOfPoint(box, point);
+    const connections = backBoxConnections[idx];
+    // Constraint only cares about vanishing points from this new point.
+    // Pretend as if this is the first point added.
+    let tempBoxPoints = [...box]; 
+    tempBoxPoints[4] = undefined;
+    tempBoxPoints[5] = undefined;
+    tempBoxPoints[6] = undefined;
+    tempBoxPoints = addPoint(tempBoxPoints, point);
+    const vp = calculateVanishingPoints(tempBoxPoints, Array.from(3));
+    let valid = true;
+    console.log(connections, vp);    
+    for (const connection of connections) {
+        const cPoint = box[connection];
+        const vectorConn = vector(cPoint, box[0]);
+        const vectorVP = vector(vp[connection - 1], box[0]);
+        const vectorSum = [vectorVP[0] + vectorConn[0], vectorVP[1] + vectorConn[1]];
+        console.log(vectorMagnitude(vectorVP), vectorMagnitude(vectorSum));
+        // If the sum of the vectors from origin to vanishing point + vector 
+        // from origin to cardinal point has a smaller magnitude then the magnitude
+        // from origin to vp, the two vectors are in opposite directions
+        valid = valid && (vectorMagnitude(vectorVP) < vectorMagnitude(vectorSum));
+    } 
+
     return valid;
 }

@@ -124,3 +124,7 @@ test("validPoint: false when third point and < 90deg.", () => {
     let valid = validPoint(box, point);
     expect(valid).toBe(false);
 })
+
+/**
+ * @todo Write test cases for validPoint 456 (test cases with math are hard :dead:.)
+ */

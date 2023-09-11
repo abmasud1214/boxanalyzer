@@ -56,8 +56,8 @@ export default function Canvas(props) {
         ctx.fillStyle = '#EEEEEE';
         ctx.fillRect(0, 0, width, height);
         ctx.fillStyle = "#000000";
-        console.log(boxPoints);
-        console.log(correctBP);
+        // console.log(boxPoints);
+        // console.log(correctBP);
         if (showDrawnBox) {
             drawBox(ctx, boxPoints, "black");
             currentPoint !== null && lengthDefined(boxPoints) < 8 && drawCurrentLine(ctx, boxPoints, "blue");
