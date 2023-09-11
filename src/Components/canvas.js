@@ -3,7 +3,7 @@ import React from "react";
 import { addPoint, calculateVanishingPoints, 
     correctBoxPoints, backBoxConnections, validPoint,
     indexOfPoint, 
-    snapPoint, lengthDefined} from "../Utils/pointsOfBox.js";
+    snapPoint, lengthDefined} from "../Utils/pointsofbox.js";
 
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
