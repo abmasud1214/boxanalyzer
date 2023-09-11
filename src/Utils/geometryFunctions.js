@@ -77,6 +77,14 @@ function vectorMagnitude(v1) {
     return Math.sqrt(v1.reduce((prev, curr) => prev + curr ** 2, 0));
 }
 
+export function vectorSameDir(v1, v2) {
+    const v1Mag = vectorMagnitude(v1);
+    const v2Mag = vectorMagnitude(v2);
+    const vectorSum = [v1[0] + v2[0], v1[1] + v2[1]];
+    const vSumMag = vectorMagnitude(vectorSum);
+    return (v1Mag > v2Mag) ? (vSumMag > v1Mag) : (vSumMag > v2Mag);
+}
+
 // console.log(doesIntersect([0, 0], [4, 4], [1, 1], [3, 3]))
 export {intersectSegments, doesIntersect, angleBetweenVectors, angleFromXAxis,
     betweenTwoAngles, ccw, vector, vectorMagnitude};

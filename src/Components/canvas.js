@@ -2,9 +2,8 @@ import React from "react";
 
 import { addPoint, calculateVanishingPoints, 
     correctBoxPoints, backBoxConnections, validPoint,
-    indexOfPoint } from "../Utils/pointsOfBox.js";
-
-import { lengthDefined } from "../Utils/pointsOfBox.js";
+    indexOfPoint, 
+    snapPoint, lengthDefined} from "../Utils/pointsOfBox.js";
 
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
@@ -75,9 +74,15 @@ export default function Canvas(props) {
         const relativeCoord = { x: currentCoord["x"] - boundingRect.left,
             y: currentCoord["y"] - boundingRect.top}; 
         
-        const valid = validPoint(boxPoints, [relativeCoord.x, relativeCoord.y]);
+        const relativePoint = [relativeCoord.x, relativeCoord.y]
+        
+        const valid = validPoint(boxPoints, relativePoint);
         if (valid) {
-            setCurrentPoint([relativeCoord.x, relativeCoord.y]);
+            setCurrentPoint(relativePoint);
+        } else if (indexOfPoint(boxPoints, relativePoint) >= 4 
+            && indexOfPoint(boxPoints, relativePoint) < 7) {
+            const snap = snapPoint(boxPoints, relativePoint);
+            setCurrentPoint(snap); 
         }
     }
 

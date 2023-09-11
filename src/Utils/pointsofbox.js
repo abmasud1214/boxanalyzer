@@ -1,6 +1,6 @@
 import { intersectSegments, doesIntersect, 
     angleBetweenVectors, angleFromXAxis,
-    betweenTwoAngles, ccw, vector, vectorMagnitude } from "./geometryFunctions";
+    betweenTwoAngles, ccw, vector, vectorMagnitude, vectorSameDir } from "./geometryFunctions";
 
 // 0 : center
 // 1 - 3 : first through third segment going counterclockwise
@@ -99,14 +99,14 @@ export function correctBoxPoints(boxPoints, vp, point) {
             boxPoints[p[1]], vpNew[p[0]-1]);
         newBoxPoints = addPoint(boxPoints, intersectPoint);
     } else if (lengthDefined(boxPoints) === 6) {
-        console.log("6")
+        // console.log("6")
         const n = point456(boxPoints, point);
         const p = connectedPoints[n];
         const intersectPoint = intersectSegments(boxPoints[p[0]], vp[p[1]-1],
             boxPoints[p[1]], vp[p[0]-1]);
         newBoxPoints = addPoint(boxPoints, intersectPoint);
     } else if (lengthDefined(boxPoints) === 7) {
-        console.log("8")
+        // console.log("8")
         const p1 = boxPoints[5];
         const p2 = boxPoints[6];
         const intersectPoint = intersectSegments(p1, vp[0], p2, vp[1]);
@@ -184,18 +184,46 @@ function validBranchPoint(box, point) {
     tempBoxPoints = addPoint(tempBoxPoints, point);
     const vp = calculateVanishingPoints(tempBoxPoints, Array.from(3));
     let valid = true;
-    console.log(connections, vp);    
+    // console.log(connections, vp);    
     for (const connection of connections) {
-        const cPoint = box[connection];
-        const vectorConn = vector(cPoint, box[0]);
-        const vectorVP = vector(vp[connection - 1], box[0]);
-        const vectorSum = [vectorVP[0] + vectorConn[0], vectorVP[1] + vectorConn[1]];
-        console.log(vectorMagnitude(vectorVP), vectorMagnitude(vectorSum));
         // If the sum of the vectors from origin to vanishing point + vector 
         // from origin to cardinal point has a smaller magnitude then the magnitude
         // from origin to vp, the two vectors are in opposite directions
-        valid = valid && (vectorMagnitude(vectorVP) < vectorMagnitude(vectorSum));
+        valid = valid && sameDirectionVanishingPoint(box, vp, connection);
     } 
 
     return valid;
+}
+
+function sameDirectionVanishingPoint(box, vanishingPoints, connection) {
+    const cPoint = box[connection]
+    const vectorConn = vector(cPoint, box[0]);
+    const vectorVP = vector(vanishingPoints[connection - 1], box[0]);
+    return vectorSameDir(vectorConn, vectorVP); 
+}
+
+export function snapPoint(box, point) {
+    const idx = indexOfPoint(box, point);
+    let tempBoxPoints = [...box]; 
+    tempBoxPoints[4] = undefined;
+    tempBoxPoints[5] = undefined;
+    tempBoxPoints[6] = undefined;
+    tempBoxPoints = addPoint(tempBoxPoints, point);
+    const vp = calculateVanishingPoints(tempBoxPoints, Array.from(3));
+    const connections = backBoxConnections[idx];
+    let newPoint = [...point]
+    for (let i = 0; i < connections.length; i++) {
+        let connection = connections[i];
+        let otherConnection = connections[i === 0 ? 1 : 0];
+        const sameDir = sameDirectionVanishingPoint(box, vp, connection);
+        if (!sameDir) {
+            const a1 = box[otherConnection];
+            const v1 = vector(box[connection], box[0]);
+            const a2 = [a1[0] + v1[0], a1[1] + v1[1]]; // if vanishing point is parallel.
+            const b1 = box[connection];
+            const b2 = newPoint;
+            newPoint = intersectSegments(a1, a2, b1, b2);
+        }
+    }
+    return newPoint;
 }
