@@ -131,6 +131,7 @@ export const backBoxConnections = {
 export function validPoint(box, point) {
     let valid = true;
     const idx = indexOfPoint(box, point);
+    if (box[idx] !== undefined) return false;
     if (idx === 2 || idx === 3) {
         valid = validCardinalPoint(box, point);
     } else if (idx >= 4 && idx < 7 ) {

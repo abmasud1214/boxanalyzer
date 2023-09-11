@@ -77,10 +77,10 @@ export default function Canvas(props) {
         const relativePoint = [relativeCoord.x, relativeCoord.y]
         
         const valid = validPoint(boxPoints, relativePoint);
+        const idx = indexOfPoint(boxPoints, relativePoint);
         if (valid) {
             setCurrentPoint(relativePoint);
-        } else if (indexOfPoint(boxPoints, relativePoint) >= 4 
-            && indexOfPoint(boxPoints, relativePoint) < 7) {
+        } else if (boxPoints[idx] === undefined && idx >= 4 && idx < 7) {
             const snap = snapPoint(boxPoints, relativePoint);
             setCurrentPoint(snap); 
         }
