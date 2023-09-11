@@ -1,7 +1,10 @@
 import React from "react";
 
 import { addPoint, calculateVanishingPoints, 
-    correctBoxPoints, backBoxConnections } from "../Utils/pointsOfBox.js";
+    correctBoxPoints, backBoxConnections, validPoint,
+    indexOfPoint } from "../Utils/pointsOfBox.js";
+
+import { lengthDefined } from "../Utils/pointsOfBox.js";
 
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
@@ -10,6 +13,7 @@ export default function Canvas(props) {
     const initBox = [[Math.floor(width / 2), Math.floor(height / 2)], ...Array.from(7)];
     const [boxPoints, setBoxPoints] = React.useState(initBox);
     const [correctBP, setCorrectBP] = React.useState(initBox);
+    const [currentPoint, setCurrentPoint] = React.useState(null);
     const [vanishingPoints, setVanishingPoints] = React.useState(Array.from(3));
 
     const drawBox = (ctx, box, style) => {
@@ -35,6 +39,18 @@ export default function Canvas(props) {
             }
         }
     }
+    
+    const drawCurrentLine = (ctx, box, style) => {
+        const idx = indexOfPoint(box, currentPoint);
+        for (const connection of backBoxConnections[idx]) {
+            const connectionPoint = box[connection];
+            ctx.beginPath();
+            ctx.moveTo(currentPoint[0], currentPoint[1]);
+            ctx.lineTo(connectionPoint[0], connectionPoint[1]);
+            ctx.strokeStyle = style;
+            ctx.stroke();
+        }
+    }
 
     const draw = (ctx) => {
         ctx.fillStyle = '#EEEEEE';
@@ -42,23 +58,35 @@ export default function Canvas(props) {
         ctx.fillStyle = "#000000";
         console.log(boxPoints);
         console.log(correctBP);
-        if (showDrawnBox) drawBox(ctx, boxPoints, "black");
+        if (showDrawnBox) {
+            drawBox(ctx, boxPoints, "black");
+            currentPoint !== null && lengthDefined(boxPoints) < 8 && drawCurrentLine(ctx, boxPoints, "blue");
+        }
         if (showCorrectBox) drawBox(ctx, correctBP, "red");
+
         // drawBox(ctx, correctBP, "red");
         // drawBox(ctx, boxPoints, "black");
     }
 
-    const handleCanvasClick = (event) => {
+    const handlePointerMove = (event) => {
         const currentCoord = { x: event.clientX, y: event.clientY };
         const boundingRect = event.currentTarget.getBoundingClientRect();
 
         const relativeCoord = { x: currentCoord["x"] - boundingRect.left,
-            y: currentCoord["y"] - boundingRect.top};
+            y: currentCoord["y"] - boundingRect.top}; 
+        
+        const valid = validPoint(boxPoints, [relativeCoord.x, relativeCoord.y]);
+        if (valid) {
+            setCurrentPoint([relativeCoord.x, relativeCoord.y]);
+        }
+    }
 
-        setBoxPoints(addPoint(boxPoints, [relativeCoord.x, relativeCoord.y]));
-        const cbp = correctBoxPoints(correctBP, vanishingPoints, [relativeCoord.x, relativeCoord.y]);
+    const handleCanvasClick = (event) => {
+        setBoxPoints(addPoint(boxPoints, currentPoint));
+        const cbp = correctBoxPoints(correctBP, vanishingPoints, currentPoint);
         setCorrectBP(cbp);
         setVanishingPoints(calculateVanishingPoints(cbp, vanishingPoints));
+        setCurrentPoint(null);
     }
 
     React.useEffect(() => {
@@ -66,7 +94,7 @@ export default function Canvas(props) {
         const context = canvas.getContext('2d');
         
         draw(context)
-    }, [boxPoints, correctBP, showDrawnBox, showCorrectBox]);
+    }, [boxPoints, correctBP, showDrawnBox, showCorrectBox, currentPoint]);
 
     return (
         <div>
@@ -75,6 +103,7 @@ export default function Canvas(props) {
                 width={width}
                 height={height}
                 onClick={handleCanvasClick}
+                onPointerMove={handlePointerMove}
             />
         </div>
     )

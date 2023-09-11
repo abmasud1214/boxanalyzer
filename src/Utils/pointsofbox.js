@@ -11,19 +11,21 @@ import { intersectSegments, doesIntersect,
 
 export function addPoint(boxPoints, newPoint) {
     let newBoxPoints = [...boxPoints];
-    if (lengthDefined(boxPoints) === 0) {
-        newBoxPoints[0] = newPoint;
-    } else if (lengthDefined(boxPoints) === 1) {
-        newBoxPoints[1] = newPoint;
-    } else if (lengthDefined(boxPoints) < 4) {
-        newBoxPoints[point2or3(boxPoints, newPoint)] = newPoint;
-    } else if (lengthDefined(boxPoints) < 7) {
-        newBoxPoints[point456(boxPoints, newPoint)] = newPoint;
-    } else {
-        newBoxPoints[7] = newPoint;
-    }
+    newBoxPoints[indexOfPoint(boxPoints, newPoint)] = newPoint;
 
     return newBoxPoints;
+}
+
+export function indexOfPoint(boxPoints, newPoint) {
+    if (lengthDefined(boxPoints) === 0 || 
+        lengthDefined(boxPoints) === 1 ||
+        lengthDefined(boxPoints) === 7) {
+        return lengthDefined(boxPoints);
+    } else if (lengthDefined(boxPoints) < 4) {
+        return point2or3(boxPoints, newPoint);
+    } else if (lengthDefined(boxPoints) < 7) {
+        return point456(boxPoints, newPoint);
+    }
 }
 
 function point2or3(boxPoints, newPoint) {
