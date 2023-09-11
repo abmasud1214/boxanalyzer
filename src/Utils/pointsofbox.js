@@ -1,6 +1,6 @@
 import { intersectSegments, doesIntersect, 
     angleBetweenVectors, angleFromXAxis,
-    betweenTwoAngles, ccw, vector, vectorMagnitude, vectorSameDir } from "./geometryFunctions";
+    betweenTwoAngles, ccw, vector, vectorMagnitude, vectorSameDir, rotateVector } from "./geometryFunctions";
 
 // 0 : center
 // 1 - 3 : first through third segment going counterclockwise
@@ -218,7 +218,7 @@ export function snapPoint(box, point) {
         const sameDir = sameDirectionVanishingPoint(box, vp, connection);
         if (!sameDir) {
             const a1 = box[otherConnection];
-            const v1 = vector(box[connection], box[0]);
+            const v1 = nudge(vector(box[connection], box[0]));
             const a2 = [a1[0] + v1[0], a1[1] + v1[1]]; // if vanishing point is parallel.
             const b1 = box[connection];
             const b2 = newPoint;
@@ -226,4 +226,12 @@ export function snapPoint(box, point) {
         }
     }
     return newPoint;
+}
+
+/**
+ * Shifts vector slightly counterclockwise so that lines are not parallel. 
+ * @param {Vector} v1 
+ */
+function nudge(v1) {
+    return rotateVector(v1, 0.01);
 }

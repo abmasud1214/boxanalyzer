@@ -85,6 +85,14 @@ export function vectorSameDir(v1, v2) {
     return (v1Mag > v2Mag) ? (vSumMag > v1Mag) : (vSumMag > v2Mag);
 }
 
+export function rotateVector(v1, theta) {
+    const cs = Math.cos(theta);
+    const sn = Math.sin(theta);
+    const xNew = v1[0] * cs - v1[1] * sn;
+    const yNew = v1[0] * sn + v1[1] * cs;
+    return [xNew, yNew];
+}
+
 // console.log(doesIntersect([0, 0], [4, 4], [1, 1], [3, 3]))
 export {intersectSegments, doesIntersect, angleBetweenVectors, angleFromXAxis,
     betweenTwoAngles, ccw, vector, vectorMagnitude};
