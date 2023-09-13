@@ -234,7 +234,7 @@ export function snapPoint(box, point) {
  * @param {Vector} v1 
  */
 function nudge(v1) {
-    return rotateVector(v1, 0.01);
+    return rotateVector(v1, 0.0001);
 }
 
 /**
