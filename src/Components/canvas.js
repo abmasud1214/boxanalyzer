@@ -3,7 +3,7 @@ import React from "react";
 import { addPoint, calculateVanishingPoints, 
     correctBoxPoints, backBoxConnections, validPoint,
     indexOfPoint, 
-    snapPoint, lengthDefined} from "../Utils/pointsofbox.js";
+    snapPoint, lengthDefined, boxMSE} from "../Utils/pointsofbox.js";
 
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
@@ -110,6 +110,7 @@ export default function Canvas(props) {
                 onClick={handleCanvasClick}
                 onPointerMove={handlePointerMove}
             />
+            {lengthDefined(boxPoints) === 8 && <p>{boxMSE(boxPoints, correctBP)}</p>}
         </div>
     )
 }

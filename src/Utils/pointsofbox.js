@@ -236,3 +236,18 @@ export function snapPoint(box, point) {
 function nudge(v1) {
     return rotateVector(v1, 0.01);
 }
+
+/**
+ * Mean Square Error of box from correct box.
+ * Differs from regular MSE in that only 3 points can be different so divide by
+ * 3 instead of length.
+ */
+export function boxMSE(box, correctBox) {
+    const zip = (rows) => rows[0].map((_, c)=>rows.map(row=>row[c]));
+    const zippedBoxes = zip([box, correctBox]);
+    const squareError = zippedBoxes.reduce((err, [p1, p2]) => {
+        const pointErr = (p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2
+        return err + pointErr;
+    }, 0);
+    return squareError / 3;
+}
