@@ -8,12 +8,14 @@ import { addPoint, calculateVanishingPoints,
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
 
-    const {width, height, showDrawnBox, showCorrectBox} = props;
+    const {width, height, 
+        showDrawnBox, showCorrectBox, 
+        boxState, updateBoxState} = props;
     const initBox = [[Math.floor(width / 2), Math.floor(height / 2)], ...Array.from(7)];
-    const [boxPoints, setBoxPoints] = React.useState(initBox);
-    const [correctBP, setCorrectBP] = React.useState(initBox);
-    const [currentPoint, setCurrentPoint] = React.useState(null);
-    const [vanishingPoints, setVanishingPoints] = React.useState(Array.from(3));
+    const boxPoints = boxState["boxPoints"]
+    const correctBP = boxState["correctBP"]
+    const vanishingPoints = boxState["vanishingPoints"]
+    const [currentPoint, setCurrentPoint] = React.useState(null)
     const [boxPointStyle, setBoxPointStyle] = React.useState(Array.from(8));
 
     const drawBox = (ctx, box, style) => {
@@ -86,15 +88,18 @@ export default function Canvas(props) {
         const relativeCoord = { x: currentCoord["x"] - boundingRect.left,
             y: currentCoord["y"] - boundingRect.top}; 
         
-        const relativePoint = [relativeCoord.x, relativeCoord.y]
+        const relativePoint = [relativeCoord.x, relativeCoord.y];
         
         const valid = validPoint(boxPoints, relativePoint);
+
         const idx = indexOfPoint(boxPoints, relativePoint);
         if (valid) {
             setCurrentPoint(relativePoint);
         } else if (boxPoints[idx] === undefined && idx >= 4 && idx < 7) {
             const snap = snapPoint(boxPoints, relativePoint);
             setCurrentPoint(snap); 
+        console.log(currentPoint);
+        console.log(currentPoint);
         }
     }
 
@@ -115,10 +120,14 @@ export default function Canvas(props) {
             newStyles[idx] = style 
             return newStyles;
         })
-        setBoxPoints(newBP);
-        const cbp = correctBoxPoints(correctBP, vanishingPoints, currentPoint);
-        setCorrectBP(cbp);
-        setVanishingPoints(calculateVanishingPoints(cbp, vanishingPoints));
+        updateBoxState("boxPoints", newBP);
+        console.log(newBP);
+        // setBoxPoints(newBP);
+        const cbp = correctBoxPoints(boxPoints, vanishingPoints, currentPoint);
+        updateBoxState("correctBP", cbp);
+        updateBoxState("vanishingPoints", calculateVanishingPoints(cbp, vanishingPoints));
+        // setCorrectBP(cbp);
+        // setVanishingPoints(calculateVanishingPoints(cbp, vanishingPoints));
         setCurrentPoint(null);
     }
 
@@ -128,7 +137,7 @@ export default function Canvas(props) {
         
         draw(context)
     }, [boxPoints, correctBP, showDrawnBox, showCorrectBox, currentPoint]);
-
+    
     return (
         <div>
             <canvas
