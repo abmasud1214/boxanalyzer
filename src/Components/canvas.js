@@ -35,6 +35,7 @@ export default function Canvas(props) {
                     ctx.beginPath();
                     ctx.moveTo(box[i][0], box[i][1]);
                     ctx.lineTo(connectionPoint[0], connectionPoint[1]);
+                    ctx.lineWidth = style === "boxPointStyle" ? 3 : 1;
                     ctx.strokeStyle = style === "boxPointStyle" ? boxPointStyle[i] : style; 
                     ctx.stroke();
                 }
@@ -60,9 +61,9 @@ export default function Canvas(props) {
         ctx.fillStyle = "#000000";
         // console.log(boxPoints);
         // console.log(correctBP);
-        const cardinalStyle = "green";
-        const semiDefinedStyle = "yellow";
-        const fixedStyle = "purple";
+        const cardinalStyle = "red";
+        const semiDefinedStyle = "#e89f00";
+        const fixedStyle = "#722f91";
         let boxStyle = cardinalStyle;
         if (lengthDefined(boxPoints) <= 4) {
             boxStyle = cardinalStyle;
@@ -109,13 +110,13 @@ export default function Canvas(props) {
             const ld = lengthDefined(newBP);
             const newStyles = [...prev]
             let idx = indexOfPoint(boxPoints, currentPoint)
-            let style = "green"
+            let style = "red"
             if (ld <= 5) {
-                style = "green"
+                style = "red"
             } else if (ld === 6) {
-                style = "yellow"
+                style = "#e89f00"
             } else {
-                style = "purple"
+                style = "#722f91"
             }
             newStyles[idx] = style 
             return newStyles;
