@@ -99,8 +99,6 @@ export default function Canvas(props) {
         } else if (boxPoints[idx] === undefined && idx >= 4 && idx < 7) {
             const snap = snapPoint(boxPoints, relativePoint);
             setCurrentPoint(snap); 
-        console.log(currentPoint);
-        console.log(currentPoint);
         }
     }
 
@@ -124,7 +122,7 @@ export default function Canvas(props) {
         updateBoxState("boxPoints", newBP);
         console.log(newBP);
         // setBoxPoints(newBP);
-        const cbp = correctBoxPoints(boxPoints, vanishingPoints, currentPoint);
+        const cbp = correctBoxPoints(correctBP, vanishingPoints, currentPoint);
         updateBoxState("correctBP", cbp);
         updateBoxState("vanishingPoints", calculateVanishingPoints(cbp, vanishingPoints));
         // setCorrectBP(cbp);

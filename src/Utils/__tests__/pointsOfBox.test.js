@@ -1,5 +1,5 @@
 import { addPoint, calculateVanishingPoints, lengthDefined, correctBoxPoints,
-    validPoint } from "../pointsOfBox";
+    validPoint } from "../pointsofbox";
 
 test("addPoint: insert point to empty box", () => {
     let box = Array(8);
