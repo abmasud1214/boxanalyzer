@@ -35,7 +35,7 @@ export default function Canvas(props) {
                     ctx.beginPath();
                     ctx.moveTo(box[i][0], box[i][1]);
                     ctx.lineTo(connectionPoint[0], connectionPoint[1]);
-                    ctx.strokeStyle = boxPointStyle[i];
+                    ctx.strokeStyle = style === "boxPointStyle" ? boxPointStyle[i] : style; 
                     ctx.stroke();
                 }
             }
@@ -72,7 +72,7 @@ export default function Canvas(props) {
             boxStyle = fixedStyle;
         }
         if (showDrawnBox) {
-            drawBox(ctx, boxPoints, "black");
+            drawBox(ctx, boxPoints, "boxPointStyle");
             currentPoint !== null && lengthDefined(boxPoints) < 8 && drawCurrentLine(ctx, boxPoints, boxStyle);
         }
         if (showCorrectBox) drawBox(ctx, correctBP, "red");
