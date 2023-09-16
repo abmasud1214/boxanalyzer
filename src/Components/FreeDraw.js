@@ -25,6 +25,14 @@ export default function FreeDraw(props) {
         }))
     }
 
+    const resetBox = () => {
+        setBoxState({
+            boxPoints: initBox,
+            correctBP: initBox,
+            vanishingPoints: [...Array.from(3)],
+        })
+    }
+
     React.useEffect(() => {
         console.log(boxState);
     }, [boxState])
@@ -47,6 +55,7 @@ export default function FreeDraw(props) {
                 <input type="radio" value="BothBox" name="box" checked={boxType === "BothBox"} />
                 <p>Show Both Boxes</p>
             </div>
+            <button onClick={resetBox}>Reset</button>
         </div>
     )
 }
