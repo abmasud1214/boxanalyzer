@@ -6,6 +6,7 @@ export default function FreeDraw(props) {
     const [width, height] = [400, 400]; 
 
     const [boxType, setBoxType] = React.useState("DrawnBox");
+    const [extendedLines, setExtendedLines] = React.useState(false);
 
     
     const onChangeEvent = (evt) => {
@@ -56,6 +57,10 @@ export default function FreeDraw(props) {
         console.log(boxState);
     }, [boxState])
 
+    React.useEffect(() => {
+        console.log(extendedLines);
+    }, [extendedLines]);
+
     return (
         <div>
             <h3>{setInfoHeader(lengthDefined(boxState.boxPoints))}</h3>
@@ -66,6 +71,7 @@ export default function FreeDraw(props) {
                 showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
                 boxState={boxState}
                 updateBoxState={updateBoxState}
+                extendedLines={extendedLines}
             />
             <div onChange={onChangeEvent}>
                 <input type="radio" value="DrawnBox" name="box" checked={boxType === "DrawnBox"} />
@@ -74,6 +80,10 @@ export default function FreeDraw(props) {
                 <p>Show Correct Box</p>
                 <input type="radio" value="BothBox" name="box" checked={boxType === "BothBox"} />
                 <p>Show Both Boxes</p>
+            </div>
+            <div onChange={(evt) => {setExtendedLines((prev)=>(!prev))}}>
+                <input type="checkbox" value="ShowLines" name="extendedLines" checked={extendedLines} />
+                <p>Show Extended Lines</p>
             </div>
             <button onClick={resetBox}>Reset</button>
         </div>

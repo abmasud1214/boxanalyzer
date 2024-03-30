@@ -1,5 +1,5 @@
 
-
+// Point of intersection between two segments
 function intersectSegments(a1, a2, b1, b2) {
     if (!doesIntersect(a1, a2, b1, b2)) {
         return [NaN, NaN];
@@ -21,6 +21,7 @@ function intersectSegments(a1, a2, b1, b2) {
     return [xi, yi];
 }
 
+// Does two line segments intersect
 function doesIntersect(a1, a2, b1, b2) {
     let v1 = [a2[0] - a1[0], a2[1] - a1[1]];
     let v2 = [b2[0] - b1[0], b2[1] - b1[1]];
@@ -53,6 +54,11 @@ function angleFromXAxis(v1) {
     return (angle < 0) ? 2 * Math.PI + angle : angle;
 }
 
+// Is angle of t1 between a1 and a2
+// @param
+//     t1: angle
+//     a1: angle
+//     a2: angle
 function betweenTwoAngles(t1, a1, a2) {
     if (a1 < a2) {
         return (a1 < t1 && t1 < a2);
@@ -91,6 +97,17 @@ export function rotateVector(v1, theta) {
     const xNew = v1[0] * cs - v1[1] * sn;
     const yNew = v1[0] * sn + v1[1] * cs;
     return [xNew, yNew];
+}
+
+export function extendLinePoint(p1, p2) {
+    const v1 = vector(p1, p2)
+    const theta = angleFromXAxis(v1);
+    const cs = Math.cos(theta);
+    const sn = Math.sin(theta);
+    const xEnd = p2[0] + 1000 * cs;
+    const yEnd = p2[1] + 1000 * sn;
+        console.log(v1, theta, xEnd, yEnd)
+    return [xEnd, yEnd];
 }
 
 // console.log(doesIntersect([0, 0], [4, 4], [1, 1], [3, 3]))

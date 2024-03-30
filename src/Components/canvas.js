@@ -4,13 +4,14 @@ import { addPoint, calculateVanishingPoints,
     correctBoxPoints, backBoxConnections, validPoint,
     indexOfPoint, 
     snapPoint, lengthDefined, boxMSE} from "../Utils/pointsofbox.js";
+import { vector, extendLinePoint} from "../Utils/geometryFunctions.js"
 
 export default function Canvas(props) {
     const canvasRef = React.useRef(null);
 
     const {width, height, 
         showDrawnBox, showCorrectBox, 
-        boxState, updateBoxState} = props;
+        boxState, updateBoxState, extendedLines} = props;
     const initBox = [[Math.floor(width / 2), Math.floor(height / 2)], ...Array.from(7)];
     const boxPoints = boxState["boxPoints"]
     const correctBP = boxState["correctBP"]
@@ -54,6 +55,27 @@ export default function Canvas(props) {
             ctx.stroke();
         }
     }
+    
+    const drawExtendedLines = (ctx, box, style) => {
+        for (let i = 0; i < box.length; i++) {
+            if (box[i] !== undefined) {
+                for (const connection of backBoxConnections[i]) {
+                    const connectionPoint = box[connection];
+                    const v1 = vector(connectionPoint, box[i]);
+                    const p2 = extendLinePoint(connectionPoint, box[i]);
+                    console.log("el", box[i], p2);
+                    ctx.beginPath();
+                    ctx.moveTo(box[i][0], box[i][1])
+                    ctx.lineTo(p2[0], p2[1]);
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([5, 5]);
+                    ctx.strokeStyle = "green";
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+            }
+        }
+    }
 
     const draw = (ctx) => {
         ctx.fillStyle = '#EEEEEE';
@@ -77,6 +99,7 @@ export default function Canvas(props) {
             currentPoint !== null && lengthDefined(boxPoints) < 8 && drawCurrentLine(ctx, boxPoints, boxStyle);
         }
         if (showCorrectBox) drawBox(ctx, correctBP, "red");
+        if (extendedLines) drawExtendedLines(ctx, boxPoints, "green");
 
         // drawBox(ctx, correctBP, "red");
         // drawBox(ctx, boxPoints, "black");
