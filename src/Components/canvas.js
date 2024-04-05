@@ -11,8 +11,7 @@ export default function Canvas(props) {
 
     const {width, height, 
         showDrawnBox, showCorrectBox, 
-        boxState, updateBoxState, extendedLines} = props;
-    const initBox = [[Math.floor(width / 2), Math.floor(height / 2)], ...Array.from(7)];
+        boxState, updateBoxState, extendedLines, image} = props;
     const boxPoints = boxState["boxPoints"]
     const correctBP = boxState["correctBP"]
     const vanishingPoints = boxState["vanishingPoints"]
@@ -83,6 +82,10 @@ export default function Canvas(props) {
         ctx.fillStyle = "#000000";
         // console.log(boxPoints);
         // console.log(correctBP);
+        if (image) {
+            console.log(width, height)
+            ctx.drawImage(image, 0, 0, width, height);
+        }
         const cardinalStyle = "red";
         const semiDefinedStyle = "#e89f00";
         const fixedStyle = "#722f91";

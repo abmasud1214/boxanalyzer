@@ -4,6 +4,7 @@ import React from "react";
 
 import Canvas from './Components/canvas';
 import FreeDraw from './Components/FreeDraw';
+import ImageDraw from './Components/ImageDraw';
 
 function App() {
 
@@ -16,7 +17,8 @@ function App() {
 
     return (
         <div className="App">
-            <FreeDraw />
+            {/* <FreeDraw /> */}
+            <ImageDraw />
             {/* <Canvas
                 width={400}
                 height={400}
