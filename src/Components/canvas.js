@@ -11,7 +11,7 @@ export default function Canvas(props) {
 
     const {width, height, 
         showDrawnBox, showCorrectBox, 
-        boxState, updateBoxState, extendedLines, image} = props;
+        boxState, updateBoxState, extendedLineOptions, image} = props;
     const boxPoints = boxState["boxPoints"]
     const correctBP = boxState["correctBP"]
     const vanishingPoints = boxState["vanishingPoints"]
@@ -68,7 +68,7 @@ export default function Canvas(props) {
                     ctx.lineTo(p2[0], p2[1]);
                     ctx.lineWidth = 1;
                     ctx.setLineDash([5, 5]);
-                    ctx.strokeStyle = "green";
+                    ctx.strokeStyle = style;
                     ctx.stroke();
                     ctx.setLineDash([]);
                 }
@@ -102,7 +102,8 @@ export default function Canvas(props) {
             currentPoint !== null && lengthDefined(boxPoints) < 8 && drawCurrentLine(ctx, boxPoints, boxStyle);
         }
         if (showCorrectBox) drawBox(ctx, correctBP, "red");
-        if (extendedLines) drawExtendedLines(ctx, boxPoints, "green");
+        if (extendedLineOptions.extendedDrawnLines) drawExtendedLines(ctx, boxPoints, "green");
+        if (extendedLineOptions.extendedCorrectLines) drawExtendedLines(ctx, correctBP, "red");
 
         // drawBox(ctx, correctBP, "red");
         // drawBox(ctx, boxPoints, "black");

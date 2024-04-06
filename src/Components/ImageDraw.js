@@ -6,7 +6,10 @@ export default function ImageDraw(props) {
     const [width, height] = [400, 400]; 
 
     const [boxType, setBoxType] = React.useState("DrawnBox");
-    const [extendedLines, setExtendedLines] = React.useState(false);
+    const [extendedLineOptions, setExtendedLineOptions] = React.useState({
+        extendedDrawnLines: false, 
+        extendedCorrectLines: false
+    });
 
     const [imageFile, setImageFile] = React.useState(null);
     const [image, setImage] = React.useState(null);
@@ -75,6 +78,14 @@ export default function ImageDraw(props) {
         return [newWidth, newHeight];
     }
 
+    const onExtendedLinesUpdate = (e) => {
+        const {name, checked} = e.target;
+        setExtendedLineOptions({
+            ...extendedLineOptions,
+            [name]: checked,
+        });
+    };
+
     React.useEffect(() => {
         console.log("FIRED")
         var img = new Image();
@@ -115,7 +126,7 @@ export default function ImageDraw(props) {
                 showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
                 boxState={boxState}
                 updateBoxState={updateBoxState}
-                extendedLines={extendedLines}
+                extendedLineOptions={extendedLineOptions}
                 image = {image}
             />}
             {/* <Canvas
@@ -135,9 +146,17 @@ export default function ImageDraw(props) {
                 <input type="radio" value="BothBox" name="box" checked={boxType === "BothBox"} />
                 <p>Show Both Boxes</p>
             </div>
-            <div onChange={(evt) => {setExtendedLines((prev)=>(!prev))}}>
-                <input type="checkbox" value="ShowLines" name="extendedLines" checked={extendedLines} />
+            <div>
+                <input type="checkbox" 
+                    name="extendedDrawnLines"
+                    checked={extendedLineOptions.extendedDrawnLines} 
+                    onChange={onExtendedLinesUpdate} />
                 <p>Show Extended Lines</p>
+                <input type="checkbox" 
+                    name="extendedCorrectLines"
+                    checked={extendedLineOptions.extendedCorrectLines} 
+                    onChange={onExtendedLinesUpdate} />
+                <p>Show Correct Box Lines</p>
             </div>
             <input type="file" onChange={onImageUpdate}/>
             <button onClick={resetBox}>Reset</button>
