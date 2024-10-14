@@ -162,7 +162,8 @@ export default function Canvas(props) {
         const context = canvas.getContext('2d');
         
         draw(context)
-    }, [boxPoints, correctBP, showDrawnBox, showCorrectBox, currentPoint]);
+    }, [boxPoints, correctBP, showDrawnBox, showCorrectBox, currentPoint,
+            extendedLineOptions]);
     
     return (
         <div>
