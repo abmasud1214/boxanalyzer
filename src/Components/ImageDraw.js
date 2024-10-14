@@ -72,8 +72,16 @@ export default function ImageDraw(props) {
         const originalHeight = image.height;
         const aspectRatio = originalWidth / originalHeight;
 
-        let newWidth = Math.min(originalWidth, maxWidth);
-        let newHeight = newWidth / aspectRatio;
+        let newWidth;
+        let newHeight;
+
+        if (width > height) {
+            newWidth = Math.min(originalWidth, maxWidth);
+            newHeight = newWidth / aspectRatio;
+        } else {
+            newHeight = Math.min(originalHeight, maxWidth);
+            newWidth = newHeight * aspectRatio;
+        }
 
         return [newWidth, newHeight];
     }
@@ -120,8 +128,8 @@ export default function ImageDraw(props) {
             <h3>{setInfoHeader(lengthDefined(boxState.boxPoints))}</h3>
             {!imageFile && <h1>Upload an Image of your boxes</h1>}
             {imageFile && image && <Canvas 
-                width = {capImageWidth(image, 1000)[0]}
-                height = {capImageWidth(image, 1000)[1]}
+                width = {capImageWidth(image, 750)[0]}
+                height = {capImageWidth(image, 750)[1]}
                 showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
                 showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
                 boxState={boxState}
