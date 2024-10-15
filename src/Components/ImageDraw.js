@@ -94,6 +94,11 @@ export default function ImageDraw(props) {
         });
     };
 
+    const clearImage = (e) => {
+        setImageFile(null);
+        setImage(null);
+    }
+
     React.useEffect(() => {
         console.log("FIRED")
         var img = new Image();
@@ -126,7 +131,15 @@ export default function ImageDraw(props) {
     return (
         <div>
             <h3>{setInfoHeader(lengthDefined(boxState.boxPoints))}</h3>
-            {!imageFile && <h1>Upload an Image of your boxes</h1>}
+            {!imageFile && <Canvas
+                width={400}
+                height={400}
+                showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
+                showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
+                boxState={boxState}
+                updateBoxState={updateBoxState}
+                extendedLineOptions={extendedLineOptions}
+            />}
             {imageFile && image && <Canvas 
                 width = {capImageWidth(image, 750)[0]}
                 height = {capImageWidth(image, 750)[1]}
@@ -137,15 +150,6 @@ export default function ImageDraw(props) {
                 extendedLineOptions={extendedLineOptions}
                 image = {image}
             />}
-            {/* <Canvas
-                width={400}
-                height={400}
-                showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
-                showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
-                boxState={boxState}
-                updateBoxState={updateBoxState}
-                extendedLines={extendedLines}
-            /> */}
             <div onChange={onChangeEvent}>
                 <input type="radio" value="DrawnBox" name="box" checked={boxType === "DrawnBox"} />
                 <p>Show Drawn Box</p>
@@ -167,6 +171,7 @@ export default function ImageDraw(props) {
                 <p>Show Correct Box Lines</p>
             </div>
             <input type="file" onChange={onImageUpdate}/>
+            <button onClick={clearImage}>Clear Image</button>
             <button onClick={resetBox}>Reset</button>
         </div>
     )
