@@ -1,0 +1,108 @@
+.imageDraw {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.boxDisplayMenus {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+    padding: 10px 0px 0px 0px;
+    border-style: solid;
+    border-radius: 15px;
+    border-width: 2px;
+    border-color:rgb(161, 161, 159);
+    width: 500px;
+
+}
+
+.boxDisplayMenus > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+h5 {
+    padding: 0px;
+    margin: 0px;
+}
+
+.showBoxMenu, .extendedLinesMenu {
+    max-width: 500px;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-auto-flow: row;
+    justify-items: start;
+    align-items: center;
+    row-gap: 10px;
+    padding: 0px 25px;
+}
+
+.showBoxMenu > input, .showBoxMenu > p, 
+    .extendedLinesMenu > input, .extendedLinesMenu > p{
+    padding: 0px 0px;
+    margin: 0px 0px;
+}
+
+button {
+    width: 250px;
+    height: 40px;
+    border-radius: 0px;
+    background-color:rgb(246, 246, 246);
+    font-family: "Calibri";
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.resetButton {
+    margin-top: 25px;
+}
+
+.imageOptions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 0px 20px 0px;
+    padding: 20px 0px;
+    border-style: solid;
+    border-radius: 15px;
+    border-width: 2px;
+    border-color:rgb(161, 161, 159);
+    width: 500px;
+}
+
+.imageUpload {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+.imageUpload > h5 {
+    margin-left: 5px;
+}
+
+input[type=file] {
+    padding: 5px 5px;
+    background-color: rgb(247, 247, 247);
+    width: 400px;
+    border-radius: 3px;
+    margin: 0px 0px 20px 0px;
+}
+
+input[type=file]::file-selector-button {
+    width: 80px;
+    height: 30px;
+    border-radius: 0px;
+    background-color:rgb(246, 246, 246);
+    font-family: "Calibri";
+    font-size: larger;
+    font-weight: bolder;
+}

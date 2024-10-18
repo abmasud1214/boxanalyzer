@@ -3,7 +3,7 @@ import React from "react";
 import { addPoint, calculateVanishingPoints, 
     correctBoxPoints, backBoxConnections, validPoint,
     indexOfPoint, 
-    snapPoint, lengthDefined, boxMSE} from "../Utils/pointsofbox.js";
+    snapPoint, lengthDefined} from "../Utils/pointsofbox.js";
 import { vector, extendLinePoint} from "../Utils/geometryFunctions.js"
 
 export default function Canvas(props) {
@@ -174,7 +174,6 @@ export default function Canvas(props) {
                 onClick={handleCanvasClick}
                 onPointerMove={handlePointerMove}
             />
-            {lengthDefined(boxPoints) === 8 && <p>{boxMSE(boxPoints, correctBP)}</p>}
         </div>
     )
 }

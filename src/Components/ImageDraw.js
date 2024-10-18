@@ -1,6 +1,8 @@
 import React from "react";
 import Canvas from "./canvas";
-import { lengthDefined } from "../Utils/pointsofbox";
+import { lengthDefined, boxMSE } from "../Utils/pointsofbox";
+
+import './ImageDraw.css'
 
 export default function ImageDraw(props) {
     const [width, height] = [400, 400]; 
@@ -97,6 +99,7 @@ export default function ImageDraw(props) {
     const clearImage = (e) => {
         setImageFile(null);
         setImage(null);
+        resetBox();
     }
 
     React.useEffect(() => {
@@ -129,7 +132,7 @@ export default function ImageDraw(props) {
     // }, [extendedLines]);
 
     return (
-        <div>
+        <div className="imageDraw">
             <h3>{setInfoHeader(lengthDefined(boxState.boxPoints))}</h3>
             {!imageFile && <Canvas
                 width={400}
@@ -150,29 +153,40 @@ export default function ImageDraw(props) {
                 extendedLineOptions={extendedLineOptions}
                 image = {image}
             />}
-            <div onChange={onChangeEvent}>
-                <input type="radio" value="DrawnBox" name="box" checked={boxType === "DrawnBox"} />
-                <p>Show Drawn Box</p>
-                <input type="radio" value="CorrectBox" name="box" checked={boxType === "CorrectBox"} />
-                <p>Show Correct Box</p>
-                <input type="radio" value="BothBox" name="box" checked={boxType === "BothBox"} />
-                <p>Show Both Boxes</p>
+            {/* {lengthDefined(boxState.boxPoints) === 8 && <p>{boxMSE(boxState.boxPoints, boxState.correctBP)}</p>} */}
+            <button className="resetButton" onClick={resetBox}>Reset Box</button>
+            <div className="boxDisplayMenus">
+                <h5>Box Display Options</h5>
+                <div>
+                    <div className="showBoxMenu" onChange={onChangeEvent}>
+                        <input type="radio" value="DrawnBox" name="box" checked={boxType === "DrawnBox"} />
+                        <p>Show Drawn Box</p>
+                        <input type="radio" value="CorrectBox" name="box" checked={boxType === "CorrectBox"} />
+                        <p>Show Correct Box</p>
+                        <input type="radio" value="BothBox" name="box" checked={boxType === "BothBox"} />
+                        <p>Show Both Boxes</p>
+                    </div>
+                    <div className="extendedLinesMenu">
+                        <input type="checkbox" 
+                            name="extendedDrawnLines"
+                            checked={extendedLineOptions.extendedDrawnLines} 
+                            onChange={onExtendedLinesUpdate} />
+                        <p>Show Extended Lines</p>
+                        <input type="checkbox" 
+                            name="extendedCorrectLines"
+                            checked={extendedLineOptions.extendedCorrectLines} 
+                            onChange={onExtendedLinesUpdate} />
+                        <p>Show Correct Box Lines</p>
+                    </div>
+                </div>
             </div>
-            <div>
-                <input type="checkbox" 
-                    name="extendedDrawnLines"
-                    checked={extendedLineOptions.extendedDrawnLines} 
-                    onChange={onExtendedLinesUpdate} />
-                <p>Show Extended Lines</p>
-                <input type="checkbox" 
-                    name="extendedCorrectLines"
-                    checked={extendedLineOptions.extendedCorrectLines} 
-                    onChange={onExtendedLinesUpdate} />
-                <p>Show Correct Box Lines</p>
+            <div className="imageOptions">
+                <div className="imageUpload">
+                    <h5>Upload an image</h5>
+                    <input type="file" onChange={onImageUpdate}/>
+                </div>
+                <button className="clearButton" onClick={clearImage}>Clear Image</button>
             </div>
-            <input type="file" onChange={onImageUpdate}/>
-            <button onClick={clearImage}>Clear Image</button>
-            <button onClick={resetBox}>Reset</button>
         </div>
     )
 }
