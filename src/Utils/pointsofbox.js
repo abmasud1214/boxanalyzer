@@ -99,14 +99,14 @@ export function correctBoxPoints(boxPoints, vp, point) {
             boxPoints[p[1]], vpNew[p[0]-1]);
         newBoxPoints = addPoint(boxPoints, intersectPoint);
     } else if (lengthDefined(boxPoints) === 6) {
-        // console.log("6")
+        console.log("6")
         const n = point456(boxPoints, point);
         const p = connectedPoints[n];
         const intersectPoint = intersectSegments(boxPoints[p[0]], vp[p[1]-1],
             boxPoints[p[1]], vp[p[0]-1]);
         newBoxPoints = addPoint(boxPoints, intersectPoint);
     } else if (lengthDefined(boxPoints) === 7) {
-        // console.log("8")
+        console.log("8")
         const p1 = boxPoints[5];
         const p2 = boxPoints[6];
         const intersectPoint = intersectSegments(p1, vp[0], p2, vp[1]);

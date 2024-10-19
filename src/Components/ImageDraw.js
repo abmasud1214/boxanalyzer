@@ -15,18 +15,16 @@ export default function ImageDraw(props) {
 
     const [imageFile, setImageFile] = React.useState(null);
     const [image, setImage] = React.useState(null);
-    
+
+    const [scale, setScale] = React.useState([width, height]);
+  
     const onChangeEvent = (evt) => {
         setBoxType(evt.target.value);
         // console.log(evt.target.value);
     }
     
     const initBox = [...Array.from(8)]
-    const [boxState, setBoxState] = React.useState({
-        boxPoints: initBox,
-        correctBP: initBox,
-        vanishingPoints: [...Array.from(3)]
-    })
+    const [boxState, setBoxState] = React.useState(null)
 
     const setInfoHeader = (length) => {
         if (length <= 3) {
@@ -45,19 +43,12 @@ export default function ImageDraw(props) {
         }
     }
     
-    const updateBoxState = (stateType, newValue) => {
-        setBoxState((prev) => ({
-            ...prev,
-            [stateType]: newValue
-        }))
+    const updateBoxState = (newValue) => {
+        setBoxState(newValue)
     }
 
     const resetBox = () => {
-        setBoxState({
-            boxPoints: initBox,
-            correctBP: initBox,
-            vanishingPoints: [...Array.from(3)],
-        })
+        setBoxState(null)
     }
 
     const onImageUpdate = (event) => {
@@ -96,6 +87,11 @@ export default function ImageDraw(props) {
         });
     };
 
+    const onScaleChangeEvent = (e) => {
+        const {value} = e.target;
+        setScale([parseInt(value, 10), parseInt(value, 10)])
+    }
+
     const clearImage = (e) => {
         setImageFile(null);
         setImage(null);
@@ -133,10 +129,12 @@ export default function ImageDraw(props) {
 
     return (
         <div className="imageDraw">
-            <h3>{setInfoHeader(lengthDefined(boxState.boxPoints))}</h3>
+            <h3>{boxState && setInfoHeader(lengthDefined(boxState.actualBox))}</h3>
             {!imageFile && <Canvas
-                width={400}
-                height={400}
+                width={scale[0]}
+                height={scale[1]}
+                rotation={0}
+                fixed={true}
                 showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
                 showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
                 boxState={boxState}
@@ -178,6 +176,18 @@ export default function ImageDraw(props) {
                             onChange={onExtendedLinesUpdate} />
                         <p>Show Correct Box Lines</p>
                     </div>
+                </div>
+            </div>
+            <div>
+                <div className="scaleMenu">
+                    <input 
+                        type="range" 
+                        min={400} 
+                        max={2000} 
+                        name="scale"
+                        value={scale[0]}
+                        onChange={onScaleChangeEvent}
+                    />
                 </div>
             </div>
             <div className="imageOptions">
