@@ -4,23 +4,19 @@ import { addPoint as pob_AddPoint,
 
 import { rotateVector } from "./geometryFunctions";
 
-
 const initializeBox = (originPoint, scale, fixed, rotation) => {
-    const initBox = [...Array.from(8)];
+    const initBox = [...Array.from({length: 8})];
 
     // normalized origin from center of frame
-    // console.log("initBox");
-    const [width, height] = scale;
+    // width and height flipped if rotated 90 degrees
+    const [width, height] = (rotation % Math.PI === 0) ? scale : [scale[1], scale[0]];
     const [x, y] = originPoint;
 
     const scaledX = (x / width) - 0.5;
     const scaledY = (y / height) - 0.5;
 
-    // console.log("initBox original", x, " ", y)
-    // console.log("width height", scale);
-    
+    // point set where rotation = 0
     const pointNoRotation = rotateVector([scaledX, scaledY], -1 * rotation);
-    // console.log("initBox transformed", pointNoRotation);
     
     return {
         actualBox: pob_AddPoint(initBox, pointNoRotation),
@@ -33,14 +29,14 @@ const initializeBox = (originPoint, scale, fixed, rotation) => {
 
 const addPoint = (box, newPoint, scale, rotation) => {
     
-    // new point to correct position:
     const [x, y] = newPoint;
-    const [width, height] = scale;
-    const [initW, initH] = box.fixed ? box.originalScale : scale;
+    const [width, height] = (rotation % Math.PI === 0) ? scale : [scale[1], scale[0]];
+    const [initW, initH] = box.fixed ? box.originalScale : [width, height];
+    
+    // new point to correct position:
     const newPointNormalized = [(x - width / 2) / initW, (y - height / 2) / initH];
-    const npNoRotation = rotateVector(newPointNormalized, -1 * rotation);    
+    const npNoRotation = rotateVector(newPointNormalized, -rotation);    
     const newBP = pob_AddPoint(box.actualBox, npNoRotation);
-    // console.log(box.vanishingPoints);
     const newCBP = pob_CorrectBoxPoints(box.correctBox, 
         box.vanishingPoints, npNoRotation);
     const newVP = pob_VanishingPoints(newCBP, box.vanishingPoints);
@@ -56,15 +52,19 @@ const addPoint = (box, newPoint, scale, rotation) => {
 const renderBox = (box, scale, rotation) => {
 
     const [width, height] = scale;
-    const [sW, sH] = box.fixed ? box.originalScale : scale;    
-    const scaledBP = box.actualBox.map((p) => [p[0] * sW, p[1] * sH]);
-    const scaledCBP = box.correctBox.map((p) => [p[0] * sW, p[1] * sH]);  
-    const rotatedBP = scaledBP.map((p) => rotateVector(p, rotation));
-    const rotatedCBP = scaledCBP.map((p) => rotateVector(p, rotation));
+    const [sW, sH] = box.fixed ? box.originalScale : scale;   
+
     const center = rotateVector([width / 2, height / 2], rotation).map(Math.abs);
+
+    const scaledBP = box.actualBox.map((p) => p ? [p[0] * sW, p[1] * sH] : undefined);
+    const scaledCBP = box.correctBox.map((p) => p ? [p[0] * sW, p[1] * sH] : undefined);  
+
+    const rotatedBP = scaledBP.map((p) => p ? rotateVector(p, rotation) : undefined);
+    const rotatedCBP = scaledCBP.map((p) => p ? rotateVector(p, rotation) : undefined);
     
-    const translatedBP = rotatedBP.map((p) => [p[0] + center[0], p[1] + center[1]]);
-    const translatedCBP = rotatedCBP.map((p) => [p[0] + center[0], p[1] + center[1]]);
+    // translate points relative to top left coordinate
+    const translatedBP = rotatedBP.map((p) => p ? [p[0] + center[0], p[1] + center[1]] : undefined);
+    const translatedCBP = rotatedCBP.map((p) => p ? [p[0] + center[0], p[1] + center[1]] : undefined);
     
     return {
         ...box,

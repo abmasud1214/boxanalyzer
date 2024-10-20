@@ -16,7 +16,8 @@ export default function ImageDraw(props) {
     const [imageFile, setImageFile] = React.useState(null);
     const [image, setImage] = React.useState(null);
 
-    const [scale, setScale] = React.useState([width, height]);
+    const [scale, setScale] = React.useState(400);
+    const [rotation, setRotation] = React.useState(0);
   
     const onChangeEvent = (evt) => {
         setBoxType(evt.target.value);
@@ -57,7 +58,7 @@ export default function ImageDraw(props) {
     }
 
     const onImageUpdate = (event) => {
-        setScale([750, 750]);
+        setScale(750);
         const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
             setImageFile(file);
@@ -95,13 +96,17 @@ export default function ImageDraw(props) {
 
     const onScaleChangeEvent = (e) => {
         const {value} = e.target;
-        setScale([parseInt(value, 10), parseInt(value, 10)])
+        setScale(parseInt(value, 10))
     }
 
     const clearImage = (e) => {
         setImageFile(null);
         setImage(null);
         resetBox();
+    }
+
+    const updateRotation = (dir) => {
+        setRotation(prev => (prev + dir * Math.PI / 2) % (2 * Math.PI));
     }
 
     React.useEffect(() => {
@@ -124,9 +129,9 @@ export default function ImageDraw(props) {
         }
     }, [imageFile])
 
-    React.useEffect(() => {
-        console.log(boxState);
-    }, [boxState])
+    // React.useEffect(() => {
+    //     console.log(boxState);
+    // }, [boxState])
 
     // React.useEffect(() => {
     //     console.log(extendedLines);
@@ -136,9 +141,9 @@ export default function ImageDraw(props) {
         <div className="imageDraw">
             <h3>{boxState && setInfoHeader(lengthDefined(boxState.actualBox))}</h3>
             {!imageFile && <Canvas
-                width={scale[0]}
-                height={scale[1]}
-                rotation={0}
+                width={scale}
+                height={scale}
+                rotation={rotation}
                 fixed={true}
                 showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
                 showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
@@ -147,9 +152,9 @@ export default function ImageDraw(props) {
                 extendedLineOptions={extendedLineOptions}
             />}
             {imageFile && image && <Canvas 
-                width = {capImageWidth(image, scale[0])[0]}
-                height = {capImageWidth(image, scale[0])[1]}
-                rotation = {0}
+                width = {capImageWidth(image, scale)[0]}
+                height = {capImageWidth(image, scale)[1]}
+                rotation = {rotation}
                 fixed = {false}
                 showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
                 showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
@@ -192,10 +197,22 @@ export default function ImageDraw(props) {
                         min={400} 
                         max={2000} 
                         name="scale"
-                        value={scale[0]}
+                        value={scale}
                         onChange={onScaleChangeEvent}
                     />
                 </div>
+                <button
+                    className="rotateButton"
+                    onClick={() => updateRotation(-1)}
+                >
+                    rotate left
+                </button>
+                <button
+                    className="rotateButton"
+                    onClick={() => updateRotation(1)}
+                    >
+                    rotate right
+                </button>
             </div>
             <div className="imageOptions">
                 <div className="imageUpload">

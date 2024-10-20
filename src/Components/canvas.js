@@ -85,9 +85,14 @@ export default function Canvas(props) {
         ctx.fillStyle = '#EEEEEE';
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         ctx.fillStyle = "#000000";
-        
+
         if (image) {
-            ctx.drawImage(image, 0, 0, width, height);
+            ctx.translate(canvasWidth / 2, canvasHeight / 2);
+            ctx.rotate(rotation);
+            ctx.drawImage(image, -width / 2, -height / 2, width, height);
+            ctx.rotate(-1 * rotation);
+            ctx.translate(-canvasWidth / 2, -canvasHeight / 2)
+
         }
         if (boxState !== null) {
             const cardinalStyle = "red";
