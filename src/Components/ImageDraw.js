@@ -49,9 +49,15 @@ export default function ImageDraw(props) {
 
     const resetBox = () => {
         setBoxState(null)
+        setBoxType("DrawnBox")
+        setExtendedLineOptions({
+            extendedDrawnLines: false,
+            extendedCorrectLines: false
+        })
     }
 
     const onImageUpdate = (event) => {
+        setScale([750, 750]);
         const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
             setImageFile(file);
@@ -99,7 +105,6 @@ export default function ImageDraw(props) {
     }
 
     React.useEffect(() => {
-        console.log("FIRED")
         var img = new Image();
         img.onload = () => {
             console.log("Image loaded successfully");
@@ -142,8 +147,10 @@ export default function ImageDraw(props) {
                 extendedLineOptions={extendedLineOptions}
             />}
             {imageFile && image && <Canvas 
-                width = {capImageWidth(image, 750)[0]}
-                height = {capImageWidth(image, 750)[1]}
+                width = {capImageWidth(image, scale[0])[0]}
+                height = {capImageWidth(image, scale[0])[1]}
+                rotation = {0}
+                fixed = {false}
                 showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
                 showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
                 boxState={boxState}

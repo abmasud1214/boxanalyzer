@@ -67,9 +67,7 @@ export default function Canvas(props) {
             if (box[i] !== undefined) {
                 for (const connection of backBoxConnections[i]) {
                     const connectionPoint = box[connection];
-                    const v1 = vector(connectionPoint, box[i]);
                     const p2 = extendLinePoint(connectionPoint, box[i]);
-                    console.log("el", box[i], p2);
                     ctx.beginPath();
                     ctx.moveTo(box[i][0], box[i][1])
                     ctx.lineTo(p2[0], p2[1]);
@@ -87,10 +85,8 @@ export default function Canvas(props) {
         ctx.fillStyle = '#EEEEEE';
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         ctx.fillStyle = "#000000";
-        // console.log(boxPoints);
-        // console.log(correctBP);
+        
         if (image) {
-            console.log(width, height)
             ctx.drawImage(image, 0, 0, width, height);
         }
         if (boxState !== null) {
@@ -121,8 +117,6 @@ export default function Canvas(props) {
     const handlePointerMove = (event) => {
         const currentCoord = { x: event.clientX, y: event.clientY };
         const boundingRect = event.currentTarget.getBoundingClientRect();
-
-        console.log(currentCoord, boundingRect);
 
         const relativeCoord = { x: currentCoord["x"] - boundingRect.left,
             y: currentCoord["y"] - boundingRect.top}; 
@@ -173,16 +167,7 @@ export default function Canvas(props) {
             newStyles[idx] = style 
             return newStyles;
         })
-            
-        // const newBP = addPoint(boxPoints, currentPoint)
-        // updateBoxState("boxPoints", newBP);
-        // console.log(newBP);
-        // // setBoxPoints(newBP);
-        // const cbp = correctBoxPoints(correctBP, vanishingPoints, currentPoint);
-        // updateBoxState("correctBP", cbp);
-        // updateBoxState("vanishingPoints", calculateVanishingPoints(cbp, vanishingPoints));
-        // // setCorrectBP(cbp);
-        // // setVanishingPoints(calculateVanishingPoints(cbp, vanishingPoints));
+
         setCurrentPoint(null);
     }
 

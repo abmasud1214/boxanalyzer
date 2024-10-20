@@ -106,7 +106,7 @@ export function extendLinePoint(p1, p2) {
     const sn = Math.sin(theta);
     const xEnd = p2[0] + 1000 * cs;
     const yEnd = p2[1] + 1000 * sn;
-        console.log(v1, theta, xEnd, yEnd)
+    // console.log(v1, theta, xEnd, yEnd)
     return [xEnd, yEnd];
 }
 

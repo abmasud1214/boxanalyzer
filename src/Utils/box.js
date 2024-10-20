@@ -9,18 +9,18 @@ const initializeBox = (originPoint, scale, fixed, rotation) => {
     const initBox = [...Array.from(8)];
 
     // normalized origin from center of frame
-    console.log("initBox");
+    // console.log("initBox");
     const [width, height] = scale;
     const [x, y] = originPoint;
 
     const scaledX = (x / width) - 0.5;
     const scaledY = (y / height) - 0.5;
 
-    console.log("initBox original", x, " ", y)
-    console.log("width height", scale);
+    // console.log("initBox original", x, " ", y)
+    // console.log("width height", scale);
     
     const pointNoRotation = rotateVector([scaledX, scaledY], -1 * rotation);
-    console.log("initBox transformed", pointNoRotation);
+    // console.log("initBox transformed", pointNoRotation);
     
     return {
         actualBox: pob_AddPoint(initBox, pointNoRotation),
@@ -40,7 +40,7 @@ const addPoint = (box, newPoint, scale, rotation) => {
     const newPointNormalized = [(x - width / 2) / initW, (y - height / 2) / initH];
     const npNoRotation = rotateVector(newPointNormalized, -1 * rotation);    
     const newBP = pob_AddPoint(box.actualBox, npNoRotation);
-    console.log(box.vanishingPoints);
+    // console.log(box.vanishingPoints);
     const newCBP = pob_CorrectBoxPoints(box.correctBox, 
         box.vanishingPoints, npNoRotation);
     const newVP = pob_VanishingPoints(newCBP, box.vanishingPoints);
