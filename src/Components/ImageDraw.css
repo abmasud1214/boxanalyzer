@@ -133,10 +133,11 @@ button {
 
 input[type=file] {
     padding: 5px 5px;
-    background-color: rgb(247, 247, 247);
+    background-color: rgb(240, 240, 240);
     width: max-content;
     border-radius: 3px;
     margin: 0px 0px 10px 0px;
+    cursor: pointer;
 }
 
 input[type=file]::file-selector-button {
@@ -166,4 +167,8 @@ hr {
 .scaleMenu > h5 {
     margin-top: 2px;
     margin-right: 5px;
+}
+
+.settings > svg:hover, button {
+    cursor: pointer
 }
