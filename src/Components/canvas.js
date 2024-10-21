@@ -124,24 +124,33 @@ export default function Canvas(props) {
         // drawBox(ctx, boxPoints, "black");
     }
 
-    const handlePointerMove = (event) => {
+    const calcCurrentPoint = (event) => {
+        let current = null;
         const currentCoord = { x: event.clientX, y: event.clientY };
         const boundingRect = event.currentTarget.getBoundingClientRect();
-
+    
         const relativeCoord = { x: currentCoord["x"] - boundingRect.left,
             y: currentCoord["y"] - boundingRect.top}; 
         
         const relativePoint = [relativeCoord.x, relativeCoord.y];
+        console.log(relativePoint);
         
         const valid = validPoint(boxPoints, relativePoint);
-
+    
         const idx = indexOfPoint(boxPoints, relativePoint);
+        console.log(valid);
         if (valid) {
-            setCurrentPoint(relativePoint);
+            return relativePoint;
         } else if (boxPoints[idx] === undefined && idx >= 4 && idx < 7) {
             const snap = snapPoint(boxPoints, relativePoint);
-            setCurrentPoint(snap); 
+            return snap; 
+        } else {
+            return null;
         }
+    }
+
+    const handlePointerMove = (event) => {
+        setCurrentPoint(calcCurrentPoint(event));
     }
 
     const handlePointerLeave = (event) => {
@@ -149,14 +158,17 @@ export default function Canvas(props) {
     }
 
     const handleCanvasClick = (event) => {
-        if (boxState === null) {
-            const initBoxState = initializeBox(currentPoint, 
-                [width, height], fixed, rotation);
-            updateBoxState(initBoxState);
-        } else {
-            const newBoxState = box_AddPoint(boxState, 
-                currentPoint, [width, height], rotation);
-            updateBoxState(newBoxState);
+        const clickPoint = calcCurrentPoint(event);
+        if (clickPoint){
+            if (boxState === null) {
+                const initBoxState = initializeBox(clickPoint, 
+                    [width, height], fixed, rotation);
+                updateBoxState(initBoxState);
+            } else {
+                const newBoxState = box_AddPoint(boxState, 
+                    clickPoint, [width, height], rotation);
+                updateBoxState(newBoxState);
+            }
         }
 
         setCurrentPoint(null);
