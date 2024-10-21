@@ -47,7 +47,7 @@ export default function Canvas(props) {
                     ctx.beginPath();
                     ctx.moveTo(box[i][0], box[i][1]);
                     ctx.lineTo(connectionPoint[0], connectionPoint[1]);
-                    ctx.lineWidth = style === "boxPointStyle" ? 3 : 10;
+                    ctx.lineWidth = style === "boxPointStyle" ? 3 : 1;
                     ctx.strokeStyle = style === "boxPointStyle" ? strokeStyle : style; 
                     ctx.stroke();
                 }
@@ -76,7 +76,7 @@ export default function Canvas(props) {
                     ctx.beginPath();
                     ctx.moveTo(box[i][0], box[i][1])
                     ctx.lineTo(p2[0], p2[1]);
-                    ctx.lineWidth = 3;
+                    ctx.lineWidth = 1;
                     ctx.setLineDash([5, 5]);
                     ctx.strokeStyle = style;
                     ctx.stroke();
