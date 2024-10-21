@@ -39,9 +39,13 @@
 .imageDraw {
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     width: 100vw;
+}
+
+.imageDraw > h3 {
+    max-width: 70vw;
 }
 
 .boxDisplayMenus {
@@ -157,6 +161,11 @@ hr {
 .rotateButton {
     width: 40px;
     height: 40px;
+}
+
+.rotateButtons {
+    display: flex;
+    justify-content: center;
 }
 
 .scaleMenu {
