@@ -1,6 +1,5 @@
-import { intersectSegments, doesIntersect, 
-    angleBetweenVectors, angleFromXAxis,
-    betweenTwoAngles, ccw, vector, vectorMagnitude, vectorSameDir, rotateVector } from "./geometryFunctions";
+import { intersectSegments, angleBetweenVectors, angleFromXAxis,
+    betweenTwoAngles, ccw, vector, vectorSameDir, rotateVector } from "./geometryFunctions";
 
 // 0 : center
 // 1 - 3 : first through third segment going counterclockwise

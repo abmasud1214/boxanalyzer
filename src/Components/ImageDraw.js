@@ -26,13 +26,12 @@ export default function ImageDraw(props) {
         // console.log(evt.target.value);
     }
     
-    const initBox = [...Array.from(8)]
     const [boxesState, setBoxesState] = React.useState([]);
     const [currentBoxIndexState, setCurrentBoxIndexState] = React.useState(0);
     const [boxState, setBoxState] = React.useState(null)
 
     const setInfoHeader = (length) => {
-        if (length == 0) {
+        if (length === 0) {
             return "Draw the first point of the box."
         }
         if (length <= 3) {
@@ -187,7 +186,7 @@ export default function ImageDraw(props) {
         if (imageFile && image) {
             const [w, h] = capImageWidth(image, scale);
             console.log(w, h);
-            const [width, height] = (rotation % Math.PI === 0) ? [w, h] : [h, w];
+            const width = (rotation % Math.PI === 0) ? w : h;
             if (width > window.innerWidth){
                 return {
                     alignSelf: "flex-start",

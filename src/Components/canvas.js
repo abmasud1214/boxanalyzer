@@ -1,10 +1,9 @@
 import React from "react";
 
-import { addPoint, calculateVanishingPoints, 
-    correctBoxPoints, backBoxConnections, validPoint,
+import { backBoxConnections, validPoint,
     indexOfPoint, 
     snapPoint, lengthDefined} from "../Utils/pointsofbox.js";
-import { vector, extendLinePoint, rotateVector} from "../Utils/geometryFunctions.js"
+import { extendLinePoint, rotateVector} from "../Utils/geometryFunctions.js"
 import { initializeBox, addPoint as box_AddPoint, renderBox } from "../Utils/box.js";
 
 
@@ -48,7 +47,7 @@ export default function Canvas(props) {
                     ctx.beginPath();
                     ctx.moveTo(box[i][0], box[i][1]);
                     ctx.lineTo(connectionPoint[0], connectionPoint[1]);
-                    ctx.lineWidth = style === "boxPointStyle" ? 3 : 1;
+                    ctx.lineWidth = style === "boxPointStyle" ? 3 : 10;
                     ctx.strokeStyle = style === "boxPointStyle" ? strokeStyle : style; 
                     ctx.stroke();
                 }
@@ -77,7 +76,7 @@ export default function Canvas(props) {
                     ctx.beginPath();
                     ctx.moveTo(box[i][0], box[i][1])
                     ctx.lineTo(p2[0], p2[1]);
-                    ctx.lineWidth = 1;
+                    ctx.lineWidth = 3;
                     ctx.setLineDash([5, 5]);
                     ctx.strokeStyle = style;
                     ctx.stroke();
@@ -150,18 +149,14 @@ export default function Canvas(props) {
     }
 
     const handleCanvasClick = (event) => {
-        let bp = boxPoints;
-        let newbp = null;
         if (boxState === null) {
             const initBoxState = initializeBox(currentPoint, 
                 [width, height], fixed, rotation);
             updateBoxState(initBoxState);
-            newbp = initBoxState.actualBox;
         } else {
             const newBoxState = box_AddPoint(boxState, 
                 currentPoint, [width, height], rotation);
             updateBoxState(newBoxState);
-            newbp = newBoxState.actualBox;
         }
 
         setCurrentPoint(null);
