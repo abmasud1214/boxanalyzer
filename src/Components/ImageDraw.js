@@ -25,9 +25,14 @@ export default function ImageDraw(props) {
     }
     
     const initBox = [...Array.from(8)]
+    const [boxesState, setBoxesState] = React.useState([]);
+    const [currentBoxIndexState, setCurrentBoxIndexState] = React.useState(0);
     const [boxState, setBoxState] = React.useState(null)
 
     const setInfoHeader = (length) => {
+        if (length == 0) {
+            return "Draw the first point of the box."
+        }
         if (length <= 3) {
             return "Draw the Y of the box."
         } else if (length === 4) {
@@ -46,15 +51,61 @@ export default function ImageDraw(props) {
     
     const updateBoxState = (newValue) => {
         setBoxState(newValue)
+        setBoxesState((prev) => {
+            const newstate = [...prev];
+            newstate[currentBoxIndexState] = newValue;
+            return newstate;
+        })
     }
 
     const resetBox = () => {
         setBoxState(null)
+        setBoxesState((prev) => {
+            const newstate = [...prev];
+            newstate[currentBoxIndexState] = null;
+            return newstate;
+        })
         setBoxType("DrawnBox")
         setExtendedLineOptions({
             extendedDrawnLines: false,
             extendedCorrectLines: false
         })
+    }
+    
+    const clearBoxes = () => {
+        setBoxesState([null]);
+        setBoxState(null);
+        setCurrentBoxIndexState(0);
+        setBoxType("DrawnBox")
+        setExtendedLineOptions({
+            extendedDrawnLines: false,
+            extendedCorrectLines: false
+        })
+    }
+    
+    const addBox = () => {
+        setBoxState(null);
+        const prevBoxesState = [...boxesState];
+        setBoxesState((prev) => {
+            const newstate = [...prev];
+            newstate[prev.length] = null;
+            return newstate;
+        })
+        setCurrentBoxIndexState(prevBoxesState.length);
+        setBoxType("DrawnBox")
+        setExtendedLineOptions({
+            extendedDrawnLines: false,
+            extendedCorrectLines: false
+        })
+    }
+
+    const changeBoxIndex = (i) => {
+        if (i >= 0 && i < boxesState.length) {
+            console.log(i);
+            console.log(boxesState);
+            setCurrentBoxIndexState(i); 
+            setBoxState(boxesState[i]);
+        }
     }
 
     const onImageUpdate = (event) => {
@@ -139,7 +190,7 @@ export default function ImageDraw(props) {
 
     return (
         <div className="imageDraw">
-            <h3>{boxState && setInfoHeader(lengthDefined(boxState.actualBox))}</h3>
+            <h3>{setInfoHeader(boxState ? lengthDefined(boxState.actualBox) : 0)}</h3>
             {!imageFile && <Canvas
                 width={scale}
                 height={scale}
@@ -165,6 +216,10 @@ export default function ImageDraw(props) {
             />}
             {/* {lengthDefined(boxState.boxPoints) === 8 && <p>{boxMSE(boxState.boxPoints, boxState.correctBP)}</p>} */}
             <button className="resetButton" onClick={resetBox}>Reset Box</button>
+            <button className="newBoxButton" onClick={clearBoxes}>Clear All Boxes</button>
+            <button className="addBoxButton" onClick={addBox}>New Boxes</button>
+            <button className="prevBoxButton" onClick={()=>changeBoxIndex(currentBoxIndexState-1)}>{"<"}</button>
+            <button className="nextBoxButton" onClick={()=>changeBoxIndex(currentBoxIndexState+1)}>{">"}</button>
             <div className="boxDisplayMenus">
                 <h5>Box Display Options</h5>
                 <div>
