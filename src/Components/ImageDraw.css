@@ -181,3 +181,9 @@ hr {
 .settings > svg:hover, button {
     cursor: pointer
 }
+
+.canvasMenu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

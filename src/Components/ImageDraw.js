@@ -258,8 +258,8 @@ export default function ImageDraw(props) {
                         </div>
                     </div>
                     <hr/>
-                    <div>
-                        <h5>Canvas Scale Options</h5>
+                    <div className="canvasMenu">
+                        <h5>Canvas Options</h5>
                         <div className="scaleMenu">
                             <h5>Scale:</h5>
                             <input 
