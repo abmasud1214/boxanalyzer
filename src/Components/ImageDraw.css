@@ -1,30 +1,62 @@
-.imageDraw {
+.imageDrawPage {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+.settings {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 20px;
+    left: 15px;
+}
+
+.settingsMenu:after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 30px;
+    border-right: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-bottom: 15px solid #f7f7f7;
+}
+
+.settingsMenu {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    background-color: #f7f7f7;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+}
+
+.imageDraw {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 100vw;
+}
+
 .boxDisplayMenus {
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 30px;
-    padding: 10px 0px 0px 0px;
-    border-style: solid;
-    border-radius: 15px;
-    border-width: 2px;
-    border-color:rgb(161, 161, 159);
-    width: 500px;
-
+    width: max-content;
 }
 
 .boxDisplayMenus > div {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: start;
     justify-content: center;
-    padding: 20px 0;
 }
 
 h5 {
@@ -36,12 +68,13 @@ h5 {
     max-width: 500px;
     display: grid;
     grid-template-columns: 40px 1fr;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     grid-auto-flow: row;
     justify-items: start;
     align-items: center;
     row-gap: 10px;
     padding: 0px 25px;
+    margin-bottom: 10px;
 }
 
 .showBoxMenu > input, .showBoxMenu > p, 
@@ -51,17 +84,26 @@ h5 {
 }
 
 button {
-    width: 250px;
-    height: 40px;
+    width: 150px;
+    height: 30px;
+    margin: 5px;
     border-radius: 0px;
     background-color:rgb(246, 246, 246);
     font-family: "Calibri";
-    font-size: larger;
+    font-size: medium;
     font-weight: bolder;
 }
 
 .resetButton {
-    margin-top: 25px;
+    margin-top: 10px;
+}
+
+.prevBoxButton {
+    width: 70px;
+}
+
+.nextBoxButton {
+    width: 70px;
 }
 
 .imageOptions {
@@ -70,12 +112,12 @@ button {
     justify-content: center;
     align-items: center;
     margin: 0px 0px 20px 0px;
-    padding: 20px 0px;
-    border-style: solid;
-    border-radius: 15px;
-    border-width: 2px;
-    border-color:rgb(161, 161, 159);
-    width: 500px;
+    padding: 0px 0px;
+    width: max-content;
+}
+
+.imageOptions > h5 {
+    margin-bottom: 10px;
 }
 
 .imageUpload {
@@ -92,9 +134,9 @@ button {
 input[type=file] {
     padding: 5px 5px;
     background-color: rgb(247, 247, 247);
-    width: 400px;
+    width: max-content;
     border-radius: 3px;
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 10px 0px;
 }
 
 input[type=file]::file-selector-button {
@@ -105,4 +147,23 @@ input[type=file]::file-selector-button {
     font-family: "Calibri";
     font-size: larger;
     font-weight: bolder;
+}
+
+hr {
+    width: 250px;
+}
+
+.rotateButton {
+    width: 40px;
+    height: 40px;
+}
+
+.scaleMenu {
+    display: flex;
+    padding: 5px;
+}
+
+.scaleMenu > h5 {
+    margin-top: 2px;
+    margin-right: 5px;
 }
