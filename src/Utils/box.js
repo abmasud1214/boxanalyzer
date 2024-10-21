@@ -1,4 +1,4 @@
-import { addPoint as pob_AddPoint, 
+import { indexOfPoint, addPoint as pob_AddPoint, 
     correctBoxPoints as pob_CorrectBoxPoints,
     calculateVanishingPoints as pob_VanishingPoints } from "./pointsofbox";
 
@@ -17,13 +17,16 @@ const initializeBox = (originPoint, scale, fixed, rotation) => {
 
     // point set where rotation = 0
     const pointNoRotation = rotateVector([scaledX, scaledY], -1 * rotation);
+
+    const orderAdd = [1, -1, -1, -1, -1, -1, -1, -1];
     
     return {
         actualBox: pob_AddPoint(initBox, pointNoRotation),
         correctBox: pob_AddPoint(initBox, pointNoRotation),
         vanishingPoints: [...Array.from(3)],
         fixed: fixed,
-        originalScale: scale
+        originalScale: scale,
+        orderAdd: orderAdd,
     }
 }
 
@@ -41,11 +44,16 @@ const addPoint = (box, newPoint, scale, rotation) => {
         box.vanishingPoints, npNoRotation);
     const newVP = pob_VanishingPoints(newCBP, box.vanishingPoints);
 
+    const idx = indexOfPoint(box.actualBox, npNoRotation);
+    const orderAdd = [...box.orderAdd];
+    orderAdd[idx] = Math.max(...orderAdd) + 1;
+
     return {
         ...box,
         actualBox: newBP,
         correctBox: newCBP,
-        vanishingPoints: newVP
+        vanishingPoints: newVP,
+        orderAdd: orderAdd,
     }
 }
 

@@ -101,8 +101,6 @@ export default function ImageDraw(props) {
 
     const changeBoxIndex = (i) => {
         if (i >= 0 && i < boxesState.length) {
-            console.log(i);
-            console.log(boxesState);
             setCurrentBoxIndexState(i); 
             setBoxState(boxesState[i]);
         }
@@ -218,8 +216,14 @@ export default function ImageDraw(props) {
             <button className="resetButton" onClick={resetBox}>Reset Box</button>
             <button className="newBoxButton" onClick={clearBoxes}>Clear All Boxes</button>
             <button className="addBoxButton" onClick={addBox}>New Boxes</button>
-            <button className="prevBoxButton" onClick={()=>changeBoxIndex(currentBoxIndexState-1)}>{"<"}</button>
-            <button className="nextBoxButton" onClick={()=>changeBoxIndex(currentBoxIndexState+1)}>{">"}</button>
+            <button 
+                className="prevBoxButton" 
+                onClick={()=>changeBoxIndex(currentBoxIndexState-1)}
+                disabled={currentBoxIndexState === 0}>{"<"}</button>
+            <button 
+                className="nextBoxButton" 
+                onClick={()=>changeBoxIndex(currentBoxIndexState+1)}
+                disabled={currentBoxIndexState === boxesState.length - 1}>{">"}</button>
             <div className="boxDisplayMenus">
                 <h5>Box Display Options</h5>
                 <div>

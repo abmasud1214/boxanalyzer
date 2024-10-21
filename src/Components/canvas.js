@@ -23,7 +23,6 @@ export default function Canvas(props) {
     const correctBP = boxState === null ? null : renderedBox["correctBox"]
     // const vanishingPoints = boxState["vanishingPoints"]
     const [currentPoint, setCurrentPoint] = React.useState(null)
-    const [boxPointStyle, setBoxPointStyle] = React.useState(Array.from(8));
 
     const drawBox = (ctx, box, style) => {
         ctx.fillStyle = style;
@@ -37,13 +36,20 @@ export default function Canvas(props) {
 
         for (let i = 0; i < box.length; i++) {
             if (box[i] !== undefined) {
+                const order = boxState.orderAdd[i];
+                let strokeStyle = "red";
+                if (order === 6) {
+                    strokeStyle = "#e89f00";
+                } else if (order > 6) {
+                    strokeStyle = "#722f91";
+                }
                 for (const connection of backBoxConnections[i]) {
                     const connectionPoint = box[connection];
                     ctx.beginPath();
                     ctx.moveTo(box[i][0], box[i][1]);
                     ctx.lineTo(connectionPoint[0], connectionPoint[1]);
                     ctx.lineWidth = style === "boxPointStyle" ? 3 : 1;
-                    ctx.strokeStyle = style === "boxPointStyle" ? boxPointStyle[i] : style; 
+                    ctx.strokeStyle = style === "boxPointStyle" ? strokeStyle : style; 
                     ctx.stroke();
                 }
             }
@@ -157,21 +163,6 @@ export default function Canvas(props) {
             updateBoxState(newBoxState);
             newbp = newBoxState.actualBox;
         }
-        setBoxPointStyle((prev) => {
-            const ld = lengthDefined(newbp);
-            const newStyles = [...prev]
-            let idx = indexOfPoint(bp, currentPoint)
-            let style = "red"
-            if (ld <= 5) {
-                style = "red"
-            } else if (ld === 6) {
-                style = "#e89f00"
-            } else {
-                style = "#722f91"
-            }
-            newStyles[idx] = style 
-            return newStyles;
-        })
 
         setCurrentPoint(null);
     }
