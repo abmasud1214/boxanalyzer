@@ -157,7 +157,7 @@ export default function ImageDraw(props) {
     const clearImage = (e) => {
         setImageFile(null);
         setImage(null);
-        resetBox();
+        clearBoxes();
     }
 
     const updateRotation = (dir) => {
@@ -170,6 +170,7 @@ export default function ImageDraw(props) {
             console.log("Image loaded successfully");
             setImage(img);
             console.log("Image Details: ", imageFile, ",", img.width, "px ", img.height, "px")
+            clearBoxes();
         };
         img.onerror = () => {
             console.log("Failed to load image");
