@@ -18,6 +18,8 @@ export default function ImageDraw(props) {
 
     const [scale, setScale] = React.useState(400);
     const [rotation, setRotation] = React.useState(0);
+    const [opacity, setOpacity] = React.useState(75);
+    const [boxOpacity, setBoxOpacity] = React.useState(100);
 
     const [settings, setSettings] = React.useState(true);
   
@@ -236,11 +238,11 @@ export default function ImageDraw(props) {
                         <h5>Box Display Options</h5>
                         <div>
                             <div className="showBoxMenu" onChange={onChangeEvent}>
-                                <input type="radio" value="DrawnBox" name="box" checked={boxType === "DrawnBox"} />
+                                <input type="radio" value="DrawnBox" name="box" checked={boxType === "DrawnBox"} readOnly={true}/>
                                 <p>Show Drawn Box</p>
-                                <input type="radio" value="CorrectBox" name="box" checked={boxType === "CorrectBox"} />
+                                <input type="radio" value="CorrectBox" name="box" checked={boxType === "CorrectBox"} readOnly={true}/>
                                 <p>Show Correct Box</p>
-                                <input type="radio" value="BothBox" name="box" checked={boxType === "BothBox"} />
+                                <input type="radio" value="BothBox" name="box" checked={boxType === "BothBox"} readOnly={true}/>
                                 <p>Show Both Boxes</p>
                             </div>
                             <div className="extendedLinesMenu">
@@ -254,6 +256,17 @@ export default function ImageDraw(props) {
                                     checked={extendedLineOptions.extendedCorrectLines} 
                                     onChange={onExtendedLinesUpdate} />
                                 <p>Show Correct Box Lines</p>
+                            </div>
+                            <div className="boxOpacityMenu">
+                                <h5>Drawn Box Opacity:</h5>
+                                <input 
+                                    type="range" 
+                                    min={0} 
+                                    max={100} 
+                                    name="boxOpacity"
+                                    value={boxOpacity}
+                                    onChange={(e) => setBoxOpacity(parseFloat(e.target.value, 10))}
+                                />
                             </div>
                         </div>
                     </div>
@@ -297,6 +310,17 @@ export default function ImageDraw(props) {
                             <h5>Upload an image</h5>
                             <input type="file" onChange={onImageUpdate}/>
                         </div>
+                        <div className="imageOpacityMenu">
+                            <h5>Image Opacity:</h5>
+                            <input 
+                                type="range" 
+                                min={0} 
+                                max={100} 
+                                name="imageOpacity"
+                                value={opacity}
+                                onChange={(e) => setOpacity(parseInt(e.target.value, 10))}
+                            />
+                        </div>
                         <button className="clearButton" onClick={clearImage}>Clear Image</button>
                     </div>
                 </div>
@@ -309,17 +333,21 @@ export default function ImageDraw(props) {
                         width={scale}
                         height={scale}
                         rotation={rotation}
+                        opacity={opacity}
+                        boxOpacity={boxOpacity}
                         fixed={true}
                         showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
                         showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}
                         boxState={boxState}
                         updateBoxState={updateBoxState}
                         extendedLineOptions={extendedLineOptions}
-                    />}
+                        />}
                     {imageFile && image && <Canvas 
                         width = {capImageWidth(image, scale)[0]}
                         height = {capImageWidth(image, scale)[1]}
                         rotation = {rotation}
+                        opacity={opacity}
+                        boxOpacity={boxOpacity}
                         fixed = {false}
                         showDrawnBox={(boxType === "DrawnBox" || boxType === "BothBox")}
                         showCorrectBox={(boxType === "CorrectBox" || boxType === "BothBox")}

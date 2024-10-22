@@ -11,7 +11,7 @@ export default function Canvas(props) {
     const canvasRef = React.useRef(null);
 
     const {width, height, rotation, fixed,
-        showDrawnBox, showCorrectBox, 
+        opacity, boxOpacity, showDrawnBox, showCorrectBox, 
         boxState, updateBoxState, extendedLineOptions, image} = props;
 
     const [canvasWidth, canvasHeight] = rotateVector([width, height], rotation).map(Math.abs);
@@ -48,8 +48,10 @@ export default function Canvas(props) {
                     ctx.moveTo(box[i][0], box[i][1]);
                     ctx.lineTo(connectionPoint[0], connectionPoint[1]);
                     ctx.lineWidth = style === "boxPointStyle" ? 3 : 1;
-                    ctx.strokeStyle = style === "boxPointStyle" ? strokeStyle : style; 
+                    ctx.strokeStyle = style === "boxPointStyle" ? strokeStyle : style;
+                    ctx.globalAlpha = style === "boxPointStyle" ? boxOpacity / 100 : 1; 
                     ctx.stroke();
+                    ctx.globalAlpha = 1; 
                 }
             }
         }
@@ -94,7 +96,9 @@ export default function Canvas(props) {
         if (image) {
             ctx.translate(canvasWidth / 2, canvasHeight / 2);
             ctx.rotate(rotation);
+            ctx.globalAlpha = opacity / 100;
             ctx.drawImage(image, -width / 2, -height / 2, width, height);
+            ctx.globalAlpha = 1;
             ctx.rotate(-1 * rotation);
             ctx.translate(-canvasWidth / 2, -canvasHeight / 2)
 
@@ -133,12 +137,10 @@ export default function Canvas(props) {
             y: currentCoord["y"] - boundingRect.top}; 
         
         const relativePoint = [relativeCoord.x, relativeCoord.y];
-        console.log(relativePoint);
         
         const valid = validPoint(boxPoints, relativePoint);
     
         const idx = indexOfPoint(boxPoints, relativePoint);
-        console.log(valid);
         if (valid) {
             return relativePoint;
         } else if (boxPoints[idx] === undefined && idx >= 4 && idx < 7) {
@@ -180,7 +182,7 @@ export default function Canvas(props) {
         
         draw(context)
     }, [boxPoints, correctBP, showDrawnBox, showCorrectBox, currentPoint,
-            extendedLineOptions]);
+            extendedLineOptions, opacity, boxOpacity]);
     
     return (
         <div>

@@ -68,6 +68,10 @@ h5 {
     margin: 0px;
 }
 
+.boxOpacityMenu {
+    align-self: center;
+}
+
 .showBoxMenu, .extendedLinesMenu {
     max-width: 500px;
     display: grid;
@@ -168,7 +172,7 @@ hr {
     justify-content: center;
 }
 
-.scaleMenu {
+.scaleMenu, .imageOpacityMenu {
     display: flex;
     padding: 5px;
 }
